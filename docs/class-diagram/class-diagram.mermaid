@@ -1,0 +1,95 @@
+classDiagram
+
+    class Product{
+        +int productId
+        +String name
+        +int price
+        +int stock //잔여 수량
+        +sale()
+    }
+
+
+    note for PopularProduct "인기품목 (실시간성X)"
+    class PopularProduct{
+        +Product product
+        +int amount // 하루당 총 주문량
+        +date date
+    }
+    PopularProduct..>Product
+
+
+    class User{
+        +int userId
+        +boolean active
+        +isActive()
+    }
+
+
+    class Order{
+        +User user
+        +List orderLines
+        +dateTime orderDateTime
+        +int totalPrice
+        +enum orderStatus // 주문요청됨, 상품준비중, 결제 대기중, 결제 완료, 주문실패
+        +readyProduct()
+        +readyPay()
+        +finishPay()
+        +failOrder()
+    }
+    Order..>User
+
+
+    class OrderLine{
+        +Order order
+        +Product product
+        +int quantity
+        +int totalPrice
+    }
+    OrderLine ..> Product
+    OrderLine ..> Order
+
+
+    class Point{
+        +User user
+        +int amount
+        +usePoint(amount)
+        +chargePoint(amount)
+    }
+    Point..>User
+
+
+
+    class Coupon{
+        +int couponId
+        +String name
+        +int stock //잔여 수량
+        +dateTime startDate
+        +dateTime endDate
+        +boolean active
+        +isActive()
+        +discountAmount(originAmount) : discountedAmount
+    }
+
+    class AmountCoupon{
+        +int amount //할인 금액
+    }
+    Coupon--|>AmountCoupon
+
+    class PercentageCoupon{
+        +int percent //할인율
+    }
+    Coupon--|>PercentageCoupon
+
+    class IssuedCoupon{
+        +Coupon coupon
+        +User user
+        +boolean isActive
+        +useCoupon()
+    }
+    IssuedCoupon..> User
+    IssuedCoupon..> Coupon
+
+
+    class PayCalculator{
+        +calculate(order, point, coupon): boolean // 결제처리
+    }
