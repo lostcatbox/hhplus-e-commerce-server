@@ -1,0 +1,11 @@
+sequenceDiagram
+    actor Client
+    participant PTR as 포인트 조회 요청
+    participant URS as User
+    participant PTS as Point
+    Client->>PTR: 포인트 조회 요청
+    PTR->>URS: User 존재 여부 확인
+    URS->>PTR: User 존재 여부 Boolean
+    PTR->>PTS: User 대한 포인트 조회 호출
+    PTS->>PTR: User 대한 포인트 조회 결과 반환
+    PTR->>Client: 포인트 조회 결과 반환

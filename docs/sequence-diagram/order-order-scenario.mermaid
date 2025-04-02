@@ -1,0 +1,48 @@
+sequenceDiagram
+    actor Client
+    participant OPR as 주문 처리 요청
+    participant URS as User
+    participant ORS as Order
+    participant PYS as PayCalculator
+    participant PTS as Point
+    participant CNS as Coupon
+    participant PTS as Product
+    participant SSC as StatisticsClient
+    Client->>OPR: 주문 처리 요청
+    OPR->>URS: User 존재 여부 확인
+    URS->>OPR: User 존재 여부 Boolean
+    OPR->>ORS: [주문요청됨] 상태로 변경
+    OPR->>ORS: [상품 준비중] 상태로 변경
+    OPR->>PTS: 상품 잔여 수량 차감 요청
+    alt is 상품 잔여 수량 - 요청 주문 수량 < 0
+PTS->>OPR: 상품 잔여 수량 차감 실패
+OPR->>ORS: [주문 실패] 상태로 변경
+    else is 상품 잔여 수량 - 요청 주문 수량 >= 0
+        PTS->>OPR: 상품 잔여 수량 차감 완료
+        OPR->>ORS: [결제 대기중] 상태로 변경
+        OPR->>PYS : User의 Order 기준 결제 처리 요청 (Coupon, Point)
+        opt is 주문 시 쿠폰 사용 요청 포함됨
+        PYS ->>CNS : 쿠폰 사용됨 상태 처리 요청
+        alt is 쿠폰 사용 가능
+        CNS->>PYS : 쿠폰 사용됨 처리완료
+        PYS->>PYS : Order 총 금액에서 쿠폰 사용금액 차감
+        else is 쿠폰 이미 사용됨 상태
+        CNS->>PYS : 쿠폰 처리 중 쿠폰 이미 사용됨 - Exception 발생
+        PYS->>ORS : [주문 실패] 상태로 변경
+        PYS->> OPR : [주문 실패] 처리 결과 반환
+        end
+        end
+        PYS->>PTS : 포인트 결제 요청
+        alt is 현재 필요한 결제 금액 - User의 Point>=0
+        PTS->>PYS : 포인트 결제 처리 성공
+        PYS->>OPR : 포인트 결제 처리 성공
+        OPR->>ORS: [결제완료] 상태로 변경
+        OPR->>SSC: 주문 처리 완료 통계 전송
+        else is 현재 필요한 결제 금액 - User의 Point<0
+        PTS->>PYS : 결제 중 포인트 부족 - Exception 발생
+        PYS->>ORS : [주문 실패] 상태로 변경
+        PYS->> OPR : [주문 실패] 처리 결과 반환
+        end
+    end
+
+    OPR->>Client: 주문 처리결과 반환
