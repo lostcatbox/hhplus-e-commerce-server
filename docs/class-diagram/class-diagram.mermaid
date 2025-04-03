@@ -5,7 +5,7 @@ classDiagram
         +String name
         +int price
         +int stock //잔여 수량
-        +sale()
+        +sale(amount) //판매 요청 수량
     }
 
 
@@ -20,8 +20,13 @@ classDiagram
 
     class User{
         +int userId
+        +String email
+        +String name
+        +String password
         +boolean active
         +isActive()
+        +checkPassword(password) : boolean
+        +changePassword(newPassword)
     }
 
 
