@@ -1,8 +1,8 @@
 sequenceDiagram
     actor Event as 제품 [결제 완료]/[주문 취소] 이벤트 발생
     participant PPR as 제품 판매량 집계 추가/삭제 요청
-    participant TSD as TopSaleData
+    participant SED as SaleData
     Event ->> PPR: 이벤트 처리 요청
-    PPR ->> TSD: 제품 판매량 집계 추가/삭제 요청(count Up,count Down)
-    TSD ->> PPR: 제품 판매량 집계 추가/삭제 결과 반환
+    PPR ->> SED: 날짜별 제품 판매량 집계 추가/삭제 요청(count Up,count Down)
+    SED ->> PPR: 날짜별 제품 판매량 집계 추가/삭제 결과 반환
     PPR ->> Event: 이벤트 처리 요청 반환
