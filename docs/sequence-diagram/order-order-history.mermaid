@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant OSR as OrderStatus 변경 요청 (PayService, OrderService등등이 호출)
+    participant ORS as Order
+    participant ORH as OrderHistory
+    OSR ->> ORS: [주문요청됨] 상태로 변경
+    ORS ->> ORH: order history Data 추가
+    OSR ->> ORS: [상품 준비중] 상태로 변경
+    ORS ->> ORH: order history Data 추가
+    OSR ->> ORS: [결제 대기중] 상태로 변경
+    ORS ->> ORH: order history Data 추가
+    OSR ->> ORS: [주문 실패] 상태로 변경
+    ORS ->> ORH: order history Data 추가
+    OSR ->> ORS: [결제완료] 상태로 변경
+    ORS ->> ORH: order history Data 추가
+    OSR ->> ORS: [주문 실패] 상태로 변경
+    ORS ->> ORH: order history Data 추가
