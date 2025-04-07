@@ -1,0 +1,15 @@
+sequenceDiagram
+    actor Client
+    participant CNR as 쿠폰 발급 요청
+    participant URS as User
+    participant CNS as Coupon
+    Client->>CNR: 쿠폰 발급 요청
+    CNR->>URS: User 존재 여부 확인
+    URS->>CNR: User 존재 여부 Boolean
+    CNR->>CNS: 쿠폰 발급 요청
+    alt is 쿠폰 잔여 수량 > 0
+    CNS->>CNR: 쿠폰 발급됨 및 잔여 쿠폰 수량 업데이트
+    else is 쿠폰 잔여 수량 = 0
+    CNS->>CNR: 쿠폰 발급 실패 및 ERROR 처리
+    end
+    CNR->>Client: User 쿠폰 발급 결과 반환 및 쿠폰 정보 반환

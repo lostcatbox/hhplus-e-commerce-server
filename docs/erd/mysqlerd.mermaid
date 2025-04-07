@@ -1,0 +1,73 @@
+erDiagram
+    USERS {
+        bigint user_id PK
+        string email
+        string name
+        string password
+        boolean active
+    }
+
+    PRODUCTS {
+        bigint product_id PK
+        string name
+        int price
+        int stock
+    }
+
+    POPULAR_PRODUCTS {
+        bigint id PK
+        bigint product_id FK
+        int amount
+        date date
+    }
+
+    POINTS {
+        bigint id PK
+        bigint user_id FK
+        int amount
+    }
+
+    ORDERS {
+        bigint order_id PK
+        bigint user_id FK
+        datetime order_datetime
+        int total_price
+        enum order_status
+    }
+
+    ORDER_LINES {
+        bigint order_line_id PK
+        bigint order_id FK
+        bigint product_id FK
+        int quantity
+        int total_price
+    }
+
+    COUPONS {
+        bigint coupon_id PK
+        string name
+        int stock
+        datetime start_date
+        datetime end_date
+        boolean active
+        enum coupon_type "PERCENTAGE_TYPE, AMOUNT_TYPE"
+        int discount_value
+    }
+
+    ISSUED_COUPONS {
+        bigint issued_coupon_id PK
+        bigint coupon_id FK
+        bigint user_id FK
+        boolean is_active
+    }
+
+    USERS ||--o{ ORDERS : places
+    USERS ||--o{ POINTS : has
+    USERS ||--o{ ISSUED_COUPONS : receives
+
+    ORDERS ||--|{ ORDER_LINES : contains
+    ORDER_LINES }|--|| PRODUCTS : references
+
+    PRODUCTS ||--o{ POPULAR_PRODUCTS : has
+
+    COUPONS ||--o{ ISSUED_COUPONS : issues

@@ -1,0 +1,11 @@
+sequenceDiagram
+    actor Client
+    participant CLR as 보유 쿠폰 리스트 조회
+    participant URS as User
+    participant CNS as Coupon
+    Client->>CLR: 쿠폰 리스트 조회
+    CLR->>URS: User 존재 여부 확인
+    URS->>CLR: User 존재 여부 Boolean
+    CLR->>CNS: User 쿠폰 리스트 조회
+    CNS->>CLR: User 쿠폰 정보 리스트 결과 반환
+    CLR->>Client: User 쿠폰 정보 리스트 결과 반환

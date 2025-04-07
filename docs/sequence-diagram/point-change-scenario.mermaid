@@ -1,0 +1,11 @@
+sequenceDiagram
+    actor Client
+    participant PCR as 포인트 충전 요청
+    participant URS as User
+    participant PTS as Point
+    Client->>PCR: 포인트 충전 요청
+    PCR->>URS: User 존재 여부 확인
+    URS->>PCR: User 존재 여부 Boolean
+    PCR->>PTS: User 대한 포인트 충전 요청
+    PTS->>PCR: User 대한 포인트 충전 결과 반환
+    PCR->>Client: 포인트 충전 결과 반환
