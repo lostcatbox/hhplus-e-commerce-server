@@ -18,7 +18,7 @@ data class User(
 
     fun changePassword(oldPassword: String, newPassword: String) {
         if (!checkPassword(oldPassword)) {
-            throw IllegalArgumentException("Old password does not match new password")
+            throw IllegalArgumentException("기존 비밀번호가 일치하지않습니다.")
         }
         this.password = newPassword
     }
