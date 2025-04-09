@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.application.service.dto
+package kr.hhplus.be.server.application.user.dto
 
 import kr.hhplus.be.server.domain.model.User
 

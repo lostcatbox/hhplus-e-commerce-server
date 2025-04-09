@@ -3,7 +3,7 @@ package kr.hhplus.be.server.presentation.controller.user
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import kr.hhplus.be.server.application.service.UserFacade
+import kr.hhplus.be.server.application.user.UserFacade
 import kr.hhplus.be.server.presentation.controller.user.dto.response.UserResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
