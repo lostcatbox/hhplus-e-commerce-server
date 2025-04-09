@@ -2,7 +2,9 @@ package kr.hhplus.be.server.domain.service.point
 
 import kr.hhplus.be.server.domain.model.Point
 import kr.hhplus.be.server.domain.port.out.PointRepository
+import org.springframework.stereotype.Service
 
+@Service
 class PointService(
     private val pointRepository: PointRepository
 ) {
