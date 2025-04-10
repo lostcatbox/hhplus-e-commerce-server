@@ -29,6 +29,15 @@ class CouponService(
         )
     }
 
+    fun useIssuedCoupon(issuedCouponId: Long?): Coupon? {
+        if (issuedCouponId == null) {
+            return null
+        }
+        val issuedCouponById = couponRepository.findIssuedCouponById(issuedCouponId)
+        issuedCouponById.useCoupon()
+        return couponRepository.findById(issuedCouponById.couponId)
+    }
+
 
 }
 

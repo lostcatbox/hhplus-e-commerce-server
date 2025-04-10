@@ -13,7 +13,7 @@ class OrderService(
     private val orderHistoryRepository: OrderHistoryRepository
 ) {
     @Transactional
-    fun transitionToProductReady(order: Order): Order {
+    fun changeProductReady(order: Order): Order {
         val updatedOrder = order.readyProduct()
         val savedOrder = orderRepository.save(updatedOrder)
         saveOrderHistory(savedOrder)
@@ -21,7 +21,7 @@ class OrderService(
     }
 
     @Transactional
-    fun transitionToPaymentReady(order: Order): Order {
+    fun changePaymentReady(order: Order): Order {
         val updatedOrder = order.readyPay()
         val savedOrder = orderRepository.save(updatedOrder)
         saveOrderHistory(savedOrder)
@@ -29,7 +29,7 @@ class OrderService(
     }
 
     @Transactional
-    fun transitionToPaymentComplete(order: Order): Order {
+    fun changePaymentComplete(order: Order): Order {
         val updatedOrder = order.finishPay()
         val savedOrder = orderRepository.save(updatedOrder)
         saveOrderHistory(savedOrder)
@@ -37,7 +37,7 @@ class OrderService(
     }
 
     @Transactional
-    fun transitionToOrderFailed(order: Order): Order {
+    fun changeOrderFailed(order: Order): Order {
         val updatedOrder = order.failOrder()
         val savedOrder = orderRepository.save(updatedOrder)
         saveOrderHistory(savedOrder)
@@ -47,7 +47,7 @@ class OrderService(
     @Transactional
     fun saveOrderHistory(order: Order) {
         val orderHistory = OrderHistory(
-            id = 0L, // DB에서 생성
+            id = -1L,
             orderId = order.id,
             userId = order.userId,
             issuedCouponId = order.issuedCouponId,

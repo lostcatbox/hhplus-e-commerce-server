@@ -14,12 +14,13 @@ enum class OrderStatus {
 data class Order(
     val id: Long = -1L,
     val userId: Long,
-    val issuedCouponId: Long, // 주문에 사용될 쿠폰 정보
+    val issuedCouponId: Long?, // 주문에 사용될 쿠폰 정보
     val orderLines: List<OrderLine>,
     val orderDateTime: LocalDateTime,
-    val totalPrice: Long,
     val orderStatus: OrderStatus = OrderStatus.주문_요청됨  // 주문요청됨, 상품준비중, 결제 대기중, 결제 완료, 주문실패
 ) {
+    val totalPrice: Long = orderLines.sumOf { it.totalPrice }
+
     fun readyProduct(): Order {
         return this.copy(
             orderStatus = OrderStatus.상품_준비중
@@ -48,9 +49,11 @@ data class Order(
 data class OrderLine(
     val orderId: Long,
     val productId: Long,
+    val productPrice: Long,
     val quantity: Long,
-    val totalPrice: Long
-)
+) {
+    val totalPrice: Long = productPrice * quantity
+}
 
 data class OrderHistory(
     val id: Long = -1L,

@@ -3,49 +3,37 @@ package kr.hhplus.be.server.application.order
 import kr.hhplus.be.server.domain.model.Order
 import kr.hhplus.be.server.domain.service.coupon.CouponService
 import kr.hhplus.be.server.domain.service.order.OrderService
-import kr.hhplus.be.server.domain.service.payment.PayCalculator
 import kr.hhplus.be.server.domain.service.payment.PaymentService
-import kr.hhplus.be.server.domain.service.point.PointService
 import kr.hhplus.be.server.domain.service.product.ProductService
 import kr.hhplus.be.server.domain.service.user.UserService
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@Component
+// OrderFacade의 가장 DownStream = OrderService <-- UpStream = user, product, coupon 등
+// 현실에서의 도메인 해결 과정과 매우 흡사하다.
+@Service
 class OrderFacade(
     private val orderService: OrderService,
     private val userService: UserService,
     private val productService: ProductService,
     private val paymentService: PaymentService,
-    private val pointService: PointService,
-    private val payCalculator: PayCalculator,
     private val couponService: CouponService
 ) {
     @Transactional
     fun processOrder(order: Order) {
-        // 1. user 검증
+        // 1. 유저 검증
         userService.checkActiveUser(order.userId)
-
-        // 2. 상품 준비 상태로 전환
-        val orderInPreparation = orderService.transitionToProductReady(order)
-
+        // 2. 유저 검증
+        val productReadyOrder = orderService.changeProductReady(order)
         // 3. 상품 재고 확인 및 차감
-        productService.saleProcessBy(order.orderLines)
-
-        // 4. 결제 필요 금액 계산
-        val finalAmount = order.issuedCouponId.let { couponId ->
-            val issuedCouponAndCoupon = couponService.findByIssuedCouponId(order.issuedCouponId)
-            payCalculator.calculateFinalAmount(order, issuedCouponAndCoupon)
-        }
-
+        productService.saleOrderProducts(order.orderLines)
+        // 4. 발급된 쿠폰 사용 및 쿠폰 정보 조회
+        val coupon = couponService.useIssuedCoupon(order.issuedCouponId)
         // 5. 결제 대기 상태로 전환
-        val orderReadyForPayment = orderService.transitionToPaymentReady(orderInPreparation)
-
-        // 6. 포인트 조회 및 결제 처리
-        val point = pointService.getPoint(order.userId)
-        val paymentResult = paymentService.processPayment(orderReadyForPayment, point, finalAmount)
-
+        val readyForPaymentOrder = orderService.changePaymentReady(productReadyOrder)
+        // 6. 결제 처리
+        paymentService.pay(readyForPaymentOrder, coupon)
         // 7. 결제 결과에 따른 처리
-        val completedOrder = orderService.transitionToPaymentComplete(orderReadyForPayment)
+        orderService.changePaymentComplete(readyForPaymentOrder)
     }
 } 
