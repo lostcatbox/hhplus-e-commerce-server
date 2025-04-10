@@ -5,6 +5,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import kr.hhplus.be.server.domain.model.*
 import kr.hhplus.be.server.domain.port.out.CouponRepository
@@ -13,6 +14,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDateTime
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 @ExtendWith(MockKExtension::class)
 class CouponServiceTest {
@@ -90,6 +94,57 @@ class CouponServiceTest {
         verify(exactly = 1) { couponRepository.findByIdWithPessimisticLock(couponId) }
         verify(exactly = 1) { coupon.issueTo(userId) }
         verify(exactly = 1) { couponRepository.save(issueCouponAndIssuedCoupon) }
+    }
+
+    @Test
+    fun `동시에 여러 사용자가 쿠폰 발급 요청 시 비관적 락으로 인해 순차적으로 처리`() {
+        // Given
+        val threadCount = 5
+        val executorService = Executors.newFixedThreadPool(threadCount)
+        val latch = CountDownLatch(threadCount)
+        
+        // 각 쿠폰 발급 결과 및 쿠폰 객체
+        val mockCoupons = List(threadCount) { mockk<PercentageCoupon>() }
+        val mockResults = List(threadCount) { mockk<IssueCouponAndIssuedCoupon>() }
+        
+        // 비관적 락 호출 시 쿠폰 반환 설정 (any()를 사용해 정확한 ID 매칭 대신 any ID 허용)
+        every { couponRepository.findByIdWithPessimisticLock(any()) } returnsMany mockCoupons
+        
+        // 쿠폰 발급 및 저장 설정 (any()를 사용해 정확한 사용자 ID 매칭 대신 any ID 허용)
+        mockCoupons.forEachIndexed { idx, mockCoupon ->
+            every { mockCoupon.issueTo(any()) } returns mockResults[idx]
+            every { couponRepository.save(mockResults[idx]) } returns Unit
+        }
+        
+        // When - 여러 스레드에서 동시에 쿠폰 발급 요청
+        repeat(threadCount) { threadIdx ->
+            val userIdForThread = threadIdx + 1L
+            executorService.submit {
+                try {
+                    couponService.issuedCoupon(userIdForThread, couponId)
+                } finally {
+                    latch.countDown()
+                }
+            }
+        }
+        
+        // 모든 작업이 완료될 때까지 대기 (최대 10초)
+        latch.await(10, TimeUnit.SECONDS)
+        executorService.shutdown()
+        
+        // Then
+        // 비관적 락 메서드가 호출된 횟수 검증
+        verify(exactly = threadCount) { couponRepository.findByIdWithPessimisticLock(any()) }
+        
+        // 각 모의 쿠폰에 대해 issueTo 메서드가 호출된 횟수 검증
+        mockCoupons.forEach { mockCoupon ->
+            verify(exactly = 1) { mockCoupon.issueTo(any()) }
+        }
+        
+        // 각 결과가 저장되었는지 검증
+        mockResults.forEach { result ->
+            verify(exactly = 1) { couponRepository.save(result) }
+        }
     }
 
     @Test
