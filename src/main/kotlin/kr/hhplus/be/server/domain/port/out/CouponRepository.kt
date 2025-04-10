@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository
 interface CouponRepository {
     fun findAllByUserId(userId: Long): List<Coupon>
     fun findById(couponId: Long): Coupon
-    fun save(issuedCoupon: IssuedCoupon)
-    fun save(coupon: Coupon)
+    fun save(issuedCoupon: IssuedCoupon): IssuedCoupon
+    fun save(coupon: Coupon): Coupon
     fun findIssuedCouponById(issuedCouponId: Long): IssuedCoupon
     fun save(issuedCouponAndCoupon: IssueCouponAndIssuedCoupon)
+    fun findByIdWithPessimisticLock(id: Long): Coupon
 }

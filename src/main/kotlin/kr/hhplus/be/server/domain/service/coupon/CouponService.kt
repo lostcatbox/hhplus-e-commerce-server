@@ -4,6 +4,7 @@ import kr.hhplus.be.server.domain.model.Coupon
 import kr.hhplus.be.server.domain.model.IssuedCoupon
 import kr.hhplus.be.server.domain.port.out.CouponRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CouponService(
@@ -13,8 +14,10 @@ class CouponService(
         return couponRepository.findAllByUserId(userId)
     }
 
+    @Transactional
     fun issuedCoupon(userId: Long, couponId: Long) {
-        val coupon = couponRepository.findById(couponId)
+        // 비관적 락을 사용하여 쿠폰 조회
+        val coupon = couponRepository.findByIdWithPessimisticLock(couponId)
         val issuedCouponAndCoupon = coupon.issueTo(userId)
         couponRepository.save(issuedCouponAndCoupon)
     }
@@ -36,8 +39,6 @@ class CouponService(
         issuedCouponById.useCoupon()
         return couponRepository.findById(issuedCouponById.couponId)
     }
-
-
 }
 
 data class IssuedCouponAndCouponVO(
