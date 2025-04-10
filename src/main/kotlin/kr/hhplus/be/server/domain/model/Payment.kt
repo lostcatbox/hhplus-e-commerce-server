@@ -10,8 +10,7 @@ data class Payment(
     val status: PaymentStatus = PaymentStatus.PENDING,
     val remainPointAmount: Long? = null,
     val couponId: Long? = null,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val updatedAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )
 
 enum class PaymentStatus {
