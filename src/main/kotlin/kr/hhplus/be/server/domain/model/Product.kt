@@ -3,7 +3,7 @@ package kr.hhplus.be.server.domain.model
 import java.time.LocalDateTime
 
 data class Product(
-    val productId: Long,
+    val id: Long,
     val name: String,
     val price: Long,
     val stock: Long, //잔여 수량
@@ -23,19 +23,19 @@ data class Product(
 
 
 data class PopularProduct(
-    val product: Long,
-    val amount: Long, // 하루당 총 주문량
+    val productId: Long,
+    val orderCount: Long, // 하루당 총 주문량
     val dateTime: LocalDateTime
 ) {
     fun saleCount(saleAmount: Long): PopularProduct {
         return this.copy(
-            amount = amount + saleAmount
+            orderCount = orderCount + saleAmount
         )
     }
 
     fun cancelSaleCount(cancelSaleAmount: Long): PopularProduct {
         return this.copy(
-            amount = amount - cancelSaleAmount
+            orderCount = orderCount - cancelSaleAmount
         )
     }
 }

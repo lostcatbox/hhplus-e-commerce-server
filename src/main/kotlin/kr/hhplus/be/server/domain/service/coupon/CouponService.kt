@@ -13,17 +13,16 @@ class CouponService(
         return couponRepository.findAllByUserId(userId)
     }
 
-    fun issudCoupon(userId: Long, couponId: Long) {
+    fun issuedCoupon(userId: Long, couponId: Long) {
         val coupon = couponRepository.findById(couponId)
         val issuedCouponAndCoupon = coupon.issueTo(userId)
-        couponRepository.save(issuedCouponAndCoupon.remainingCoupon)
-        couponRepository.save(issuedCouponAndCoupon.issuedCoupon)
+        couponRepository.save(issuedCouponAndCoupon)
     }
 
-    fun findByIssuedCouponId(issuedCouponId: Long): IssuedCouponAndCoupon {
+    fun findByIssuedCouponId(issuedCouponId: Long): IssuedCouponAndCouponVO {
         val issuedCouponById = couponRepository.findIssuedCouponById(issuedCouponId)
         val coupon = couponRepository.findById(issuedCouponById.couponId)
-        return IssuedCouponAndCoupon(
+        return IssuedCouponAndCouponVO(
             issuedCoupon = issuedCouponById,
             coupon = coupon
         )
@@ -41,7 +40,7 @@ class CouponService(
 
 }
 
-data class IssuedCouponAndCoupon(
+data class IssuedCouponAndCouponVO(
     val issuedCoupon: IssuedCoupon,
     val coupon: Coupon
 )

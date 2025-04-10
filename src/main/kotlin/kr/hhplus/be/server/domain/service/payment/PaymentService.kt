@@ -26,7 +26,7 @@ class PaymentService(
         }
 
         // 포인트 결제 처리
-        val usedPoint = point.usePoint(order.userId)
+        val usedPoint = point.usePoint(finalPayAmount)
 
         // 결제 정보 생성
         val payment = Payment(

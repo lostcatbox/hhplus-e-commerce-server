@@ -16,14 +16,14 @@ class ProductTest {
         fun `정상적인 상품 생성`() {
             // when
             val product = Product(
-                productId = 1L,
+                id = 1L,
                 name = "테스트 상품",
                 price = 10000L,
                 stock = 100L
             )
 
             // then
-            product.productId shouldBe 1L
+            product.id shouldBe 1L
             product.name shouldBe "테스트 상품"
             product.price shouldBe 10000L
             product.stock shouldBe 100L
@@ -33,7 +33,7 @@ class ProductTest {
         fun `가격이 0보다 작으면 생성 실패`() {
             shouldThrow<IllegalArgumentException> {
                 Product(
-                    productId = 1L,
+                    id = 1L,
                     name = "테스트 상품",
                     price = -1000L,
                     stock = 100L
@@ -45,7 +45,7 @@ class ProductTest {
         fun `재고가 0보다 작으면 생성 실패`() {
             shouldThrow<IllegalArgumentException> {
                 Product(
-                    productId = 1L,
+                    id = 1L,
                     name = "테스트 상품",
                     price = 1000L,
                     stock = -1L
@@ -57,7 +57,7 @@ class ProductTest {
         fun `가격이 0인 상품 생성 가능`() {
             // when
             val product = Product(
-                productId = 1L,
+                id = 1L,
                 name = "무료 상품",
                 price = 0L,
                 stock = 100L
@@ -75,7 +75,7 @@ class ProductTest {
         fun `정상적인 상품 판매`() {
             // given
             val product = Product(
-                productId = 1L,
+                id = 1L,
                 name = "테스트 상품",
                 price = 10000L,
                 stock = 100L
@@ -86,7 +86,7 @@ class ProductTest {
 
             // then
             soldProduct.stock shouldBe 90L
-            soldProduct.productId shouldBe product.productId
+            soldProduct.id shouldBe product.id
             soldProduct.name shouldBe product.name
             soldProduct.price shouldBe product.price
         }
@@ -101,8 +101,8 @@ class ProductTest {
         fun `인기 상품 판매량 증가`() {
             // given
             val popularProduct = PopularProduct(
-                product = 1L,
-                amount = 100L,
+                productId = 1L,
+                orderCount = 100L,
                 dateTime = now
             )
 
@@ -110,8 +110,8 @@ class ProductTest {
             val result = popularProduct.saleCount(10L)
 
             // then
-            result.amount shouldBe 110L
-            result.product shouldBe popularProduct.product
+            result.orderCount shouldBe 110L
+            result.productId shouldBe popularProduct.productId
             result.dateTime shouldBe popularProduct.dateTime
         }
 
@@ -119,8 +119,8 @@ class ProductTest {
         fun `인기 상품 판매량 취소`() {
             // given
             val popularProduct = PopularProduct(
-                product = 1L,
-                amount = 100L,
+                productId = 1L,
+                orderCount = 100L,
                 dateTime = now
             )
 
@@ -128,8 +128,8 @@ class ProductTest {
             val result = popularProduct.cancelSaleCount(10L)
 
             // then
-            result.amount shouldBe 90L
-            result.product shouldBe popularProduct.product
+            result.orderCount shouldBe 90L
+            result.productId shouldBe popularProduct.productId
             result.dateTime shouldBe popularProduct.dateTime
         }
 
@@ -137,14 +137,14 @@ class ProductTest {
         fun `인기 상품 생성`() {
             // when
             val popularProduct = PopularProduct(
-                product = 1L,
-                amount = 0L,
+                productId = 1L,
+                orderCount = 0L,
                 dateTime = now
             )
 
             // then
-            popularProduct.product shouldBe 1L
-            popularProduct.amount shouldBe 0L
+            popularProduct.productId shouldBe 1L
+            popularProduct.orderCount shouldBe 0L
             popularProduct.dateTime shouldBe now
         }
     }

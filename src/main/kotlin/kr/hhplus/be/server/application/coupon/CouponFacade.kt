@@ -17,6 +17,6 @@ class CouponFacade(
 
     fun issuedCouponTo(userId: Long, couponId: Long) {
         userService.checkActiveUser(userId)
-        couponService.issudCoupon(userId, couponId)
+        couponService.issuedCoupon(userId, couponId)
     }
 }

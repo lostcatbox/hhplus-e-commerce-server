@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.port.out
 
 import kr.hhplus.be.server.domain.model.Coupon
+import kr.hhplus.be.server.domain.model.IssueCouponAndIssuedCoupon
 import kr.hhplus.be.server.domain.model.IssuedCoupon
 import org.springframework.stereotype.Repository
 
@@ -11,4 +12,5 @@ interface CouponRepository {
     fun save(issuedCoupon: IssuedCoupon)
     fun save(coupon: Coupon)
     fun findIssuedCouponById(issuedCouponId: Long): IssuedCoupon
+    fun save(issuedCouponAndCoupon: IssueCouponAndIssuedCoupon)
 }

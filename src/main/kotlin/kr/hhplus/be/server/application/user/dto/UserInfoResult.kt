@@ -10,7 +10,7 @@ data class UserInfoResult(
     companion object {
         fun of(user: User): UserInfoResult {
             return UserInfoResult(
-                userId = user.userId,
+                userId = user.id,
                 userName = user.name,
                 email = user.email
             )

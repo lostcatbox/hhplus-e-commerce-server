@@ -3,7 +3,7 @@ package kr.hhplus.be.server.domain.model
 import java.time.LocalDateTime
 
 abstract class Coupon(
-    val couponId: Long,
+    val id: Long,
     val name: String,
     val stock: Long, //잔여 수량
     val startDate: LocalDateTime,
@@ -18,13 +18,8 @@ abstract class Coupon(
     fun isAvailable(): Boolean {
         val now = LocalDateTime.now()
         return active &&
-                stock > 0 &&
                 now.isAfter(startDate) &&
                 now.isBefore(endDate)
-    }
-
-    fun isActive(): Boolean {
-        return active
     }
 
     abstract fun discountAmount(originAmount: Long): Long
@@ -35,7 +30,7 @@ abstract class Coupon(
 
         return IssueCouponAndIssuedCoupon(
             issuedCoupon = IssuedCoupon(
-                couponId = couponId,
+                couponId = id,
                 userId = userId,
                 isUsed = false
             ),
@@ -48,7 +43,7 @@ abstract class Coupon(
 
 
 class AmountCoupon(
-    couponId: Long,
+    id: Long,
     name: String,
     stock: Long,
     startDate: LocalDateTime,
@@ -56,7 +51,7 @@ class AmountCoupon(
     active: Boolean,
     val amount: Long
 ) : Coupon(
-    couponId, name, stock, startDate, endDate, active
+    id, name, stock, startDate, endDate, active
 ) {
     init {
         require(amount > 0) { "할인 금액은 0보다 커야 합니다" }
@@ -72,7 +67,7 @@ class AmountCoupon(
 
     override fun createWithDecreasedStock(): Coupon {
         return AmountCoupon(
-            couponId = couponId,
+            id = id,
             name = name,
             stock = stock - 1,
             startDate = startDate,
@@ -84,7 +79,7 @@ class AmountCoupon(
 }
 
 class PercentageCoupon(
-    couponId: Long,
+    id: Long,
     name: String,
     stock: Long,
     startDate: LocalDateTime,
@@ -92,7 +87,7 @@ class PercentageCoupon(
     active: Boolean,
     val percent: Double
 ) : Coupon(
-    couponId, name, stock, startDate, endDate, active
+    id, name, stock, startDate, endDate, active
 ) {
     init {
         require(percent > 0 && percent <= 100) { "할인율은 0%초과 100%이하여야 합니다" }
@@ -104,7 +99,7 @@ class PercentageCoupon(
 
     override fun createWithDecreasedStock(): Coupon {
         return PercentageCoupon(
-            couponId = couponId,
+            id = id,
             name = name,
             stock = stock - 1,
             startDate = startDate,

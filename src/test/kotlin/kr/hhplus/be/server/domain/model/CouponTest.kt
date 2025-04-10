@@ -20,7 +20,7 @@ class CouponsTest {
         fun `정상적인 금액 할인 쿠폰 생성`() {
             // when & then
             AmountCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
                 startDate = validStartDate,
@@ -34,7 +34,7 @@ class CouponsTest {
         fun `할인 금액이 0 이하면 생성 실패`() {
             shouldThrow<IllegalArgumentException> {
                 AmountCoupon(
-                    couponId = 1L,
+                    id = 1L,
                     name = "잘못된 쿠폰",
                     stock = 100L,
                     startDate = validStartDate,
@@ -49,7 +49,7 @@ class CouponsTest {
         fun `정상적인 금액 할인 계산`() {
             // given
             val coupon = AmountCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
                 startDate = validStartDate,
@@ -69,7 +69,7 @@ class CouponsTest {
         fun `할인 금액이 원래 금액보다 크면 예외 발생`() {
             // given
             val coupon = AmountCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
                 startDate = validStartDate,
@@ -92,7 +92,7 @@ class CouponsTest {
         fun `정상적인 퍼센트 할인 쿠폰 생성`() {
             // when & then
             PercentageCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "10% 할인 쿠폰",
                 stock = 100L,
                 startDate = validStartDate,
@@ -106,7 +106,7 @@ class CouponsTest {
         fun `할인율이 0% 이하면 생성 실패`() {
             shouldThrow<IllegalArgumentException> {
                 PercentageCoupon(
-                    couponId = 1L,
+                    id = 1L,
                     name = "잘못된 쿠폰",
                     stock = 100L,
                     startDate = validStartDate,
@@ -121,7 +121,7 @@ class CouponsTest {
         fun `할인율이 100% 초과면 생성 실패`() {
             shouldThrow<IllegalArgumentException> {
                 PercentageCoupon(
-                    couponId = 1L,
+                    id = 1L,
                     name = "잘못된 쿠폰",
                     stock = 100L,
                     startDate = validStartDate,
@@ -136,7 +136,7 @@ class CouponsTest {
         fun `정상적인 퍼센트 할인 계산`() {
             // given
             val coupon = PercentageCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "10% 할인 쿠폰",
                 stock = 100L,
                 startDate = validStartDate,
@@ -160,7 +160,7 @@ class CouponsTest {
         fun `정상적인 쿠폰 발급`() {
             // given
             val coupon = AmountCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
                 startDate = validStartDate,
@@ -183,7 +183,7 @@ class CouponsTest {
         fun `재고가 없으면 발급 실패`() {
             // given
             val coupon = AmountCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 0L,
                 startDate = validStartDate,
@@ -202,7 +202,7 @@ class CouponsTest {
         fun `비활성화된 쿠폰은 발급 실패`() {
             // given
             val coupon = AmountCoupon(
-                couponId = 1L,
+                id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
                 startDate = validStartDate,

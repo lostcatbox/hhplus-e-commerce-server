@@ -1,10 +1,10 @@
 package kr.hhplus.be.server.domain.model
 
 data class User(
-    val userId: Long,
+    val id: Long,
     val name: String,
-    val email: String,
-    var password: String,
+    val email: String = "",
+    var password: String = "",
     val active: Boolean
 ) {
     fun isActive(): Boolean {
