@@ -3,7 +3,9 @@ package kr.hhplus.be.server.application.point
 import kr.hhplus.be.server.domain.model.Point
 import kr.hhplus.be.server.domain.service.point.PointService
 import kr.hhplus.be.server.domain.service.user.UserService
+import org.springframework.stereotype.Service
 
+@Service
 class PointFacade(
     private val userService: UserService,
     private val pointService: PointService

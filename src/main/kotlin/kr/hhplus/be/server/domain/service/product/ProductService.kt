@@ -20,7 +20,7 @@ class ProductService(
     }
 
     @Transactional
-    fun saleProcessBy(orderLines: List<OrderLine>) {
+    fun saleOrderProducts(orderLines: List<OrderLine>) {
         for (orderLine in orderLines) {
             val product = findById(orderLine.productId)
             // 재고 차감

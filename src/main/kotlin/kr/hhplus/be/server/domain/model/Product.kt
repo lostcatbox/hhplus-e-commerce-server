@@ -19,13 +19,6 @@ data class Product(
             stock = stock - saleAmount
         )
     }
-
-    fun deductStock(quantity: Int): Product {
-        if (stock.toInt() < quantity) {
-            throw IllegalStateException("재고가 부족합니다.")
-        }
-        return copy(stock = stock - quantity)
-    }
 }
 
 
