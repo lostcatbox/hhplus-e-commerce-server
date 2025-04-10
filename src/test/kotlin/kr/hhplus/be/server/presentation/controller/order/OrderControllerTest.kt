@@ -23,7 +23,7 @@ class OrderControllerTest {
     fun `POST 주문 요청 - 200 Ok`() {
         val request = OrderRequest(
             userId = 1L,
-            couponIds = listOf(1L, 2L),
+            couponId = 1L,
             orderLines = listOf(
                 OrderLine(productId = 1L, quantity = 1),
                 OrderLine(productId = 2L, quantity = 2)

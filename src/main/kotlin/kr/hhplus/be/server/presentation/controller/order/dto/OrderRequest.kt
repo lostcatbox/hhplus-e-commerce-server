@@ -7,7 +7,7 @@ data class OrderRequest(
     @field:NotNull
     val userId: Long,
     @field:NotNull
-    val couponIds: List<Long>,
+    val couponId: Long,
     @field:NotNull
     val orderLines: List<OrderLine>
 )
