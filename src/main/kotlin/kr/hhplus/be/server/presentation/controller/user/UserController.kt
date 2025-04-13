@@ -21,8 +21,6 @@ class UserController {
     )
     @GetMapping("/{userId}")
     fun getUser(@PathVariable("userId") userId: Long): UserResponse {
-//		comand = UserComamnd(req.userId, req.userName);
-//		userService.getUser(comand);
         return UserResponse(1, "1234@naver.com", "김철수", true)
     }
 }
