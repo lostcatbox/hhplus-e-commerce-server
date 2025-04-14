@@ -12,8 +12,8 @@ import kr.hhplus.be.server.domain.order.Order
 import kr.hhplus.be.server.domain.order.OrderLine
 import kr.hhplus.be.server.domain.order.OrderStatus
 import kr.hhplus.be.server.domain.payment.Payment
-import kr.hhplus.be.server.domain.payment.PaymentService
 import kr.hhplus.be.server.domain.payment.PaymentHistoryRepository
+import kr.hhplus.be.server.domain.payment.PaymentService
 import kr.hhplus.be.server.domain.payment.PaymentStatus
 import kr.hhplus.be.server.domain.point.Point
 import kr.hhplus.be.server.domain.point.PointService
@@ -44,7 +44,6 @@ class PaymentServiceTest {
     fun setUp() {
         val orderLines = listOf(
             OrderLine(
-                orderId = 1L,
                 productId = 1L,
                 productPrice = 1000L,
                 quantity = 2L
@@ -70,7 +69,7 @@ class PaymentServiceTest {
             active = true
         )
 
-        point = Point(userId = userId, amount = 10000L)
+        point = Point(id = -1, userId = userId, amount = 10000L)
 
         every { pointService.getPoint(userId) } returns point
 //        every { point.usePoint(userId) } returns usedPoint

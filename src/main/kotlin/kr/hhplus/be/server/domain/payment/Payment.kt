@@ -1,8 +1,12 @@
 package kr.hhplus.be.server.domain.payment
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
 import java.time.LocalDateTime
 
+@Entity(name = "payments")
 data class Payment(
+    @Id
     val id: Long,
     val orderId: Long,
     val userId: Long,

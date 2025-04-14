@@ -1,13 +1,25 @@
 package kr.hhplus.be.server.domain.coupon
 
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
+@Entity(name = "coupons")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "coupon_type")
 abstract class Coupon(
-    val id: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = -1L,
+
     val name: String,
-    val stock: Long, //잔여 수량
+    val stock: Long,
+
+    @Column(name = "start_date")
     val startDate: LocalDateTime,
+
+    @Column(name = "end_date")
     val endDate: LocalDateTime,
+    @Column(name = "active")
     val active: Boolean
 ) {
     init {
@@ -41,9 +53,10 @@ abstract class Coupon(
     abstract fun createWithDecreasedStock(): Coupon
 }
 
-
+@Entity
+@DiscriminatorValue("AMOUNT")
 class AmountCoupon(
-    id: Long,
+    id: Long = -1L,
     name: String,
     stock: Long,
     startDate: LocalDateTime,
@@ -78,8 +91,10 @@ class AmountCoupon(
     }
 }
 
+@Entity
+@DiscriminatorValue("PERCENTAGE")
 class PercentageCoupon(
-    id: Long,
+    id: Long = -1L,
     name: String,
     stock: Long,
     startDate: LocalDateTime,
@@ -108,15 +123,23 @@ class PercentageCoupon(
             active = active
         )
     }
-
 }
 
+@Entity(name = "issued_coupons")
 data class IssuedCoupon(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = -1L,
+
+    @Column(name = "coupon_id")
     val couponId: Long,
+
+    @Column(name = "user_id")
     val userId: Long,
+
+    @Column(name = "is_used")
     val isUsed: Boolean
 ) {
-
     fun canBeUsed(): Boolean {
         return !isUsed
     }
@@ -125,7 +148,6 @@ data class IssuedCoupon(
         require(!isUsed) { "이미 사용된 쿠폰압니다. IssuedCoupon.couponId: $couponId" }
         return this.copy(isUsed = true)
     }
-
 }
 
 // 발급 결과를 담는 데이터 클래스

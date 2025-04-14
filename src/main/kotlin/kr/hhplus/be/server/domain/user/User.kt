@@ -1,6 +1,11 @@
 package kr.hhplus.be.server.domain.user
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+
+@Entity(name = "users")
 data class User(
+    @Id
     val id: Long,
     val name: String,
     val email: String = "",

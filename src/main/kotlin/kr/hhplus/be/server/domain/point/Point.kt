@@ -1,6 +1,12 @@
 package kr.hhplus.be.server.domain.point
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+
+@Entity(name = "points")
 data class Point(
+    @Id
+    val id: Long,
     val userId: Long,
     val amount: Long
 ) {
@@ -17,7 +23,7 @@ data class Point(
 
     companion object {
         fun EMPTY(userId: Long): Point {
-            return Point(userId, 0)
+            return Point(-1, userId, 0)
         }
     }
 }

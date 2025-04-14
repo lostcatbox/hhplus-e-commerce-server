@@ -1,8 +1,12 @@
 package kr.hhplus.be.server.domain.product
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
 import java.time.LocalDateTime
 
+@Entity(name = "products")
 data class Product(
+    @Id
     val id: Long,
     val name: String,
     val price: Long,
@@ -21,8 +25,9 @@ data class Product(
     }
 }
 
-
+@Entity(name = "popular_products")
 data class PopularProduct(
+    @Id
     val productId: Long,
     val orderCount: Long, // 하루당 총 주문량
     val dateTime: LocalDateTime

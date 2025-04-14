@@ -18,7 +18,6 @@ class OrdersTest {
         // given
         val orderLines = listOf(
             OrderLine(
-                orderId = 1L,
                 productId = 1L,
                 productPrice = 1000L,
                 quantity = 2L
@@ -42,7 +41,6 @@ class OrdersTest {
         // given
         val orderLines = listOf(
             OrderLine(
-                orderId = 1L,
                 productId = 1L,
                 productPrice = 1000L,
                 quantity = 2L
@@ -72,7 +70,6 @@ class OrdersTest {
     fun `OrderLine 생성 시 totalPrice가 자동 계산된다`() {
         // given & when
         val orderLine = OrderLine(
-            orderId = 1L,
             productId = 1L,
             productPrice = 1000L,
             quantity = 2L
@@ -87,7 +84,6 @@ class OrdersTest {
         // given
         val orderLines = listOf(
             OrderLine(
-                orderId = 1L,
                 productId = 1L,
                 productPrice = 1000L,
                 quantity = 2L
@@ -96,8 +92,8 @@ class OrdersTest {
 
         // when
         val orderHistory = OrderHistory(
-            orderId = 1L,
             userId = 1L,
+            orderId = 1L,
             orderLines = orderLines,
             orderDateTime = now,
             totalPrice = 2000L,
@@ -116,7 +112,6 @@ class OrdersTest {
         // given
         val orderLines = listOf(
             OrderLine(
-                orderId = 1L,
                 productId = 1L,
                 productPrice = 1000L,
                 quantity = 2L
@@ -141,7 +136,6 @@ class OrdersTest {
         // given
         val orderLines = listOf(
             OrderLine(
-                orderId = 1L,
                 productId = 1L,
                 productPrice = 1000L,
                 quantity = 2L

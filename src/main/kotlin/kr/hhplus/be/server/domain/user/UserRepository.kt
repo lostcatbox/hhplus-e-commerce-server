@@ -4,5 +4,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository {
-    fun findByUserId(userId: Long): User?
+    fun findById(userId: Long): User?
 }

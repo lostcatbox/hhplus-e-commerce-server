@@ -92,7 +92,6 @@ class ProductServiceTest {
         // Given
         val orderLines = listOf(
             OrderLine(
-                orderId = 1L,
                 productId = 1L,
                 productPrice = 1000L,
                 quantity = 2L

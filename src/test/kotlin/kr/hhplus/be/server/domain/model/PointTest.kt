@@ -15,7 +15,7 @@ class PointTest {
         @Test
         fun `포인트 정상 사용`() {
             // given
-            val point = Point(userId = 1L, amount = 10000L)
+            val point = Point(-1, userId = 1L, amount = 10000L)
             val useAmount = 3000L
 
             // when
@@ -29,7 +29,7 @@ class PointTest {
         @Test
         fun `보유 포인트보다 많은 금액 사용 시 예외 발생`() {
             // given
-            val point = Point(userId = 1L, amount = 1000L)
+            val point = Point(id = -1, userId = 1L, amount = 1000L)
             val useAmount = 2000L
 
             // when & then
@@ -41,7 +41,7 @@ class PointTest {
         @Test
         fun `보유 포인트와 동일한 금액 사용 가능`() {
             // given
-            val point = Point(userId = 1L, amount = 1000L)
+            val point = Point(id = -1, userId = 1L, amount = 1000L)
             val useAmount = 1000L
 
             // when
@@ -58,7 +58,7 @@ class PointTest {
         @Test
         fun `포인트 정상 충전`() {
             // given
-            val point = Point(userId = 1L, amount = 1000L)
+            val point = Point(id = -1, userId = 1L, amount = 1000L)
             val chargeAmount = 5000L
 
             // when
@@ -72,7 +72,7 @@ class PointTest {
         @Test
         fun `0 이하 금액 충전 시 예외 발생`() {
             // given
-            val point = Point(userId = 1L, amount = 1000L)
+            val point = Point(id = -1, userId = 1L, amount = 1000L)
             val chargeAmount = 0L
 
             // when & then
@@ -84,7 +84,7 @@ class PointTest {
         @Test
         fun `100만원 초과 충전 시 예외 발생`() {
             // given
-            val point = Point(userId = 1L, amount = 1000L)
+            val point = Point(id = -1, userId = 1L, amount = 1000L)
             val chargeAmount = 1000001L
 
             // when & then
@@ -96,7 +96,7 @@ class PointTest {
         @Test
         fun `100만원 충전 가능`() {
             // given
-            val point = Point(userId = 1L, amount = 1000L)
+            val point = Point(id = -1, userId = 1L, amount = 1000L)
             val chargeAmount = 1000000L
 
             // when
@@ -113,7 +113,7 @@ class PointTest {
         @Test
         fun `Point 객체 생성`() {
             // when
-            val point = Point(userId = 1L, amount = 0L)
+            val point = Point(id = -1, userId = 1L, amount = 0L)
 
             // then
             point.userId shouldBe 1L

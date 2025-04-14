@@ -8,11 +8,11 @@ class UserService(
     private val userRepository: UserRepository
 ) {
     fun getUserByUserId(userId: Long): User {
-        return userRepository.findByUserId(userId)
+        return userRepository.findById(userId)
             ?: throw UserNotFoundException(userId)
     }
 
     fun checkActiveUser(userId: Long): Boolean {
-        return userRepository.findByUserId(userId)?.isActive() ?: false
+        return userRepository.findById(userId)?.isActive() ?: false
     }
 }
