@@ -6,7 +6,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import kr.hhplus.be.server.domain.order.OrderLine
-import kr.hhplus.be.server.domain.point.Product
+import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductRepository
 import kr.hhplus.be.server.domain.product.ProductService
 import kr.hhplus.be.server.exceptions.ProductNotFoundException

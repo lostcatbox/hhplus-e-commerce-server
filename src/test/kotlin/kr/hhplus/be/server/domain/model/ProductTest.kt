@@ -2,8 +2,8 @@ package kr.hhplus.be.server.domain.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
-import kr.hhplus.be.server.domain.point.PopularProduct
-import kr.hhplus.be.server.domain.point.Product
+import kr.hhplus.be.server.domain.product.PopularProduct
+import kr.hhplus.be.server.domain.product.Product
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import java.time.LocalDateTime

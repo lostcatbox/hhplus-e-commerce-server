@@ -5,7 +5,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
-import kr.hhplus.be.server.domain.point.PopularProduct
+import kr.hhplus.be.server.domain.product.PopularProduct
 import kr.hhplus.be.server.domain.product.ProductStatisticRepository
 import kr.hhplus.be.server.domain.product.ProductStatisticService
 import org.junit.jupiter.api.Assertions.assertEquals

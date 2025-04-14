@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.domain.product
 
-import kr.hhplus.be.server.domain.point.PopularProduct
 import org.springframework.stereotype.Service
 
 @Service
