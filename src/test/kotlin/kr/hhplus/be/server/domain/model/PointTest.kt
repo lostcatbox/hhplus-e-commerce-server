@@ -2,6 +2,7 @@ package kr.hhplus.be.server.domain.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import kr.hhplus.be.server.domain.point.Point
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

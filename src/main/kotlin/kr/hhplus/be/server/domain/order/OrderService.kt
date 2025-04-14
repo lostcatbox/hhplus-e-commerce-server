@@ -1,9 +1,5 @@
-package kr.hhplus.be.server.domain.service.order
+package kr.hhplus.be.server.domain.order
 
-import OrderHistoryRepository
-import OrderRepository
-import kr.hhplus.be.server.domain.model.Order
-import kr.hhplus.be.server.domain.model.OrderHistory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

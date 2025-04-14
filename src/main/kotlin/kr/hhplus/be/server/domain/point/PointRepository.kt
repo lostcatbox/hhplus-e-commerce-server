@@ -1,6 +1,5 @@
-package kr.hhplus.be.server.domain.port.out
+package kr.hhplus.be.server.domain.point
 
-import kr.hhplus.be.server.domain.model.Point
 import org.springframework.stereotype.Repository
 
 @Repository

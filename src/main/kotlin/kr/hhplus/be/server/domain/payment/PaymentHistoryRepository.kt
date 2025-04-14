@@ -1,6 +1,5 @@
-package kr.hhplus.be.server.domain.port.out
+package kr.hhplus.be.server.domain.payment
 
-import kr.hhplus.be.server.domain.model.Payment
 import org.springframework.stereotype.Repository
 
 @Repository

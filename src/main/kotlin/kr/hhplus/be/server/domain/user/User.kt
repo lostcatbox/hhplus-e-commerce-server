@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.domain.model
+package kr.hhplus.be.server.domain.user
 
 data class User(
     val id: Long,

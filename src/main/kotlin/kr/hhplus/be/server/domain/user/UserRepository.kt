@@ -1,6 +1,5 @@
-package kr.hhplus.be.server.domain.port.out
+package kr.hhplus.be.server.domain.user
 
-import kr.hhplus.be.server.domain.model.User
 import org.springframework.stereotype.Repository
 
 @Repository

@@ -5,8 +5,9 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
-import kr.hhplus.be.server.domain.model.User
-import kr.hhplus.be.server.domain.port.out.UserRepository
+import kr.hhplus.be.server.domain.user.User
+import kr.hhplus.be.server.domain.user.UserRepository
+import kr.hhplus.be.server.domain.user.UserService
 import kr.hhplus.be.server.exceptions.UserNotFoundException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

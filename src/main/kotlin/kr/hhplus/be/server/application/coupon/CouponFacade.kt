@@ -1,8 +1,8 @@
 package kr.hhplus.be.server.application.coupon
 
-import kr.hhplus.be.server.domain.model.Coupon
-import kr.hhplus.be.server.domain.service.coupon.CouponService
-import kr.hhplus.be.server.domain.service.user.UserService
+import kr.hhplus.be.server.domain.coupon.Coupon
+import kr.hhplus.be.server.domain.coupon.CouponService
+import kr.hhplus.be.server.domain.user.UserService
 import org.springframework.stereotype.Service
 
 @Service

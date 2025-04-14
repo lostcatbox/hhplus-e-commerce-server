@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.application.user
 
 import kr.hhplus.be.server.application.user.dto.UserInfoResult
-import kr.hhplus.be.server.domain.service.user.UserService
+import kr.hhplus.be.server.domain.user.UserService
 import org.springframework.stereotype.Service
 
 // Facade는 응용 계층이다. 여러 도메인 service 를 통합한다.

@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.application.user.dto
 
-import kr.hhplus.be.server.domain.model.User
+import kr.hhplus.be.server.domain.user.User
 
 data class UserInfoResult(
     val userId: Long,

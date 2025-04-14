@@ -3,8 +3,8 @@ package kr.hhplus.be.server.domain.service
 import io.kotest.assertions.throwables.shouldThrow
 import io.mockk.every
 import io.mockk.mockk
-import kr.hhplus.be.server.domain.port.out.UserRepository
-import kr.hhplus.be.server.domain.service.user.UserService
+import kr.hhplus.be.server.domain.user.UserRepository
+import kr.hhplus.be.server.domain.user.UserService
 import kr.hhplus.be.server.exceptions.UserNotFoundException
 import org.junit.jupiter.api.Test
 

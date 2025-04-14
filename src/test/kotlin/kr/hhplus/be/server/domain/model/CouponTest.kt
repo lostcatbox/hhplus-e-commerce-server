@@ -2,6 +2,9 @@ package kr.hhplus.be.server.domain.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import kr.hhplus.be.server.domain.coupon.AmountCoupon
+import kr.hhplus.be.server.domain.coupon.IssuedCoupon
+import kr.hhplus.be.server.domain.coupon.PercentageCoupon
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

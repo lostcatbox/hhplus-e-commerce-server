@@ -1,7 +1,5 @@
-package kr.hhplus.be.server.domain.service.user
+package kr.hhplus.be.server.domain.user
 
-import kr.hhplus.be.server.domain.model.User
-import kr.hhplus.be.server.domain.port.out.UserRepository
 import kr.hhplus.be.server.exceptions.UserNotFoundException
 import org.springframework.stereotype.Service
 

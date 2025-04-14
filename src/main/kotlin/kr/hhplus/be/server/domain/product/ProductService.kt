@@ -1,8 +1,7 @@
-package kr.hhplus.be.server.domain.service.product
+package kr.hhplus.be.server.domain.product
 
-import kr.hhplus.be.server.domain.model.OrderLine
-import kr.hhplus.be.server.domain.model.Product
-import kr.hhplus.be.server.domain.port.out.ProductRepository
+import kr.hhplus.be.server.domain.order.OrderLine
+import kr.hhplus.be.server.domain.point.Product
 import kr.hhplus.be.server.exceptions.ProductNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

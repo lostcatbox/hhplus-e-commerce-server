@@ -1,8 +1,8 @@
 package kr.hhplus.be.server.application.point
 
-import kr.hhplus.be.server.domain.model.Point
-import kr.hhplus.be.server.domain.service.point.PointService
-import kr.hhplus.be.server.domain.service.user.UserService
+import kr.hhplus.be.server.domain.point.Point
+import kr.hhplus.be.server.domain.point.PointService
+import kr.hhplus.be.server.domain.user.UserService
 import org.springframework.stereotype.Service
 
 @Service

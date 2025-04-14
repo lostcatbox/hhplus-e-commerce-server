@@ -1,4 +1,5 @@
-import kr.hhplus.be.server.domain.model.Order
+package kr.hhplus.be.server.domain.order
+
 import org.springframework.stereotype.Repository
 
 @Repository

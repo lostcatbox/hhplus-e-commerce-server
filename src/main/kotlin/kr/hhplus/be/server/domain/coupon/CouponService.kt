@@ -1,8 +1,5 @@
-package kr.hhplus.be.server.domain.service.coupon
+package kr.hhplus.be.server.domain.coupon
 
-import kr.hhplus.be.server.domain.model.Coupon
-import kr.hhplus.be.server.domain.model.IssuedCoupon
-import kr.hhplus.be.server.domain.port.out.CouponRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

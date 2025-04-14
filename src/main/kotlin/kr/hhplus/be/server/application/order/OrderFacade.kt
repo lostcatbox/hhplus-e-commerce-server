@@ -1,11 +1,11 @@
 package kr.hhplus.be.server.application.order
 
-import kr.hhplus.be.server.domain.model.Order
-import kr.hhplus.be.server.domain.service.coupon.CouponService
-import kr.hhplus.be.server.domain.service.order.OrderService
-import kr.hhplus.be.server.domain.service.payment.PaymentService
-import kr.hhplus.be.server.domain.service.product.ProductService
-import kr.hhplus.be.server.domain.service.user.UserService
+import kr.hhplus.be.server.domain.order.Order
+import kr.hhplus.be.server.domain.coupon.CouponService
+import kr.hhplus.be.server.domain.order.OrderService
+import kr.hhplus.be.server.domain.payment.PaymentService
+import kr.hhplus.be.server.domain.product.ProductService
+import kr.hhplus.be.server.domain.user.UserService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

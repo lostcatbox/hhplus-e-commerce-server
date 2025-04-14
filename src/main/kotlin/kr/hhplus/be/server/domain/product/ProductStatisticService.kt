@@ -1,7 +1,6 @@
-package kr.hhplus.be.server.domain.service.product
+package kr.hhplus.be.server.domain.product
 
-import kr.hhplus.be.server.domain.model.PopularProduct
-import kr.hhplus.be.server.domain.port.out.ProductStatisticRepository
+import kr.hhplus.be.server.domain.point.PopularProduct
 import org.springframework.stereotype.Service
 
 @Service

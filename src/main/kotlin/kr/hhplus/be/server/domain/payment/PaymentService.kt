@@ -1,11 +1,8 @@
-package kr.hhplus.be.server.domain.service.payment
+package kr.hhplus.be.server.domain.payment
 
-import kr.hhplus.be.server.domain.model.Coupon
-import kr.hhplus.be.server.domain.model.Order
-import kr.hhplus.be.server.domain.model.Payment
-import kr.hhplus.be.server.domain.model.PaymentStatus
-import kr.hhplus.be.server.domain.port.out.PaymentHistoryRepository
-import kr.hhplus.be.server.domain.service.point.PointService
+import kr.hhplus.be.server.domain.coupon.Coupon
+import kr.hhplus.be.server.domain.order.Order
+import kr.hhplus.be.server.domain.point.PointService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

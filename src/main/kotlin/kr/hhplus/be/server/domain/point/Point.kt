@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.domain.model
+package kr.hhplus.be.server.domain.point
 
 data class Point(
     val userId: Long,

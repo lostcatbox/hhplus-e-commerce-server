@@ -1,5 +1,9 @@
 package kr.hhplus.be.server.domain.model
 
+import kr.hhplus.be.server.domain.order.Order
+import kr.hhplus.be.server.domain.order.OrderHistory
+import kr.hhplus.be.server.domain.order.OrderLine
+import kr.hhplus.be.server.domain.order.OrderStatus
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import kotlin.test.assertEquals

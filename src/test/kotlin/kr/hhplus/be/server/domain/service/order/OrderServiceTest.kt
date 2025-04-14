@@ -1,17 +1,18 @@
 package kr.hhplus.be.server.domain.service.order
 
-import OrderHistoryRepository
-import OrderRepository
+import kr.hhplus.be.server.domain.order.OrderHistoryRepository
+import kr.hhplus.be.server.domain.order.OrderRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.slot
 import io.mockk.verify
-import kr.hhplus.be.server.domain.model.Order
-import kr.hhplus.be.server.domain.model.OrderHistory
-import kr.hhplus.be.server.domain.model.OrderLine
-import kr.hhplus.be.server.domain.model.OrderStatus
+import kr.hhplus.be.server.domain.order.Order
+import kr.hhplus.be.server.domain.order.OrderHistory
+import kr.hhplus.be.server.domain.order.OrderLine
+import kr.hhplus.be.server.domain.order.OrderStatus
+import kr.hhplus.be.server.domain.order.OrderService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
