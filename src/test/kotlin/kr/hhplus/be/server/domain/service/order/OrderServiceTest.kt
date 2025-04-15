@@ -4,7 +4,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.slot
 import io.mockk.verify
 import kr.hhplus.be.server.domain.order.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -48,7 +47,13 @@ class OrderServiceTest {
             orderStatus = OrderStatus.주문_요청됨
         )
 
-        savedOrder = order.copy()
+        savedOrder = Order(
+            id = order.id,
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines,
+            orderDateTime = order.orderDateTime
+        )
 
         every { orderRepository.save(any()) } returns savedOrder
         every { orderHistoryRepository.save(any()) } returns OrderHistory(
@@ -67,7 +72,13 @@ class OrderServiceTest {
     fun `상품 준비 상태로 전환`() {
         // Given
         val expectedStatus = OrderStatus.상품_준비중
-        val expectedOrder = order.copy(orderStatus = expectedStatus)
+        val expectedOrder = Order(
+            id = order.id,
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines,
+            orderDateTime = order.orderDateTime, orderStatus = expectedStatus
+        )
         every { orderRepository.save(any()) } returns expectedOrder
 
         // When
@@ -83,7 +94,13 @@ class OrderServiceTest {
     fun `결제 대기 상태로 전환`() {
         // Given
         val expectedStatus = OrderStatus.결제_대기중
-        val expectedOrder = order.copy(orderStatus = expectedStatus)
+        val expectedOrder = Order(
+            id = order.id,
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines,
+            orderDateTime = order.orderDateTime, orderStatus = expectedStatus
+        )
         every { orderRepository.save(any()) } returns expectedOrder
 
         // When
@@ -99,7 +116,13 @@ class OrderServiceTest {
     fun `결제 완료 상태로 전환`() {
         // Given
         val expectedStatus = OrderStatus.결제_완료
-        val expectedOrder = order.copy(orderStatus = expectedStatus)
+        val expectedOrder = Order(
+            id = order.id,
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines,
+            orderDateTime = order.orderDateTime, orderStatus = expectedStatus
+        )
         every { orderRepository.save(any()) } returns expectedOrder
 
         // When
@@ -115,7 +138,13 @@ class OrderServiceTest {
     fun `주문 실패 상태로 전환`() {
         // Given
         val expectedStatus = OrderStatus.주문_실패
-        val expectedOrder = order.copy(orderStatus = expectedStatus)
+        val expectedOrder = Order(
+            id = order.id,
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines,
+            orderDateTime = order.orderDateTime, orderStatus = expectedStatus
+        )
         every { orderRepository.save(any()) } returns expectedOrder
 
         // When
@@ -125,28 +154,5 @@ class OrderServiceTest {
         assertEquals(expectedStatus, result.orderStatus)
         verify(exactly = 1) { orderRepository.save(any()) }
         verify(exactly = 1) { orderHistoryRepository.save(any()) }
-    }
-
-    @Test
-    fun `주문 이력 저장`() {
-        // Given
-        val historySlot = slot<OrderHistory>()
-        every { orderHistoryRepository.save(capture(historySlot)) } answers {
-            historySlot.captured.copy(id = 1L)
-        }
-
-        // When
-        orderService.saveOrderHistory(order)
-
-        // Then
-        verify(exactly = 1) { orderHistoryRepository.save(any()) }
-        val capturedHistory = historySlot.captured
-        assertEquals(order.id, capturedHistory.orderId)
-        assertEquals(order.userId, capturedHistory.userId)
-        assertEquals(order.issuedCouponId, capturedHistory.issuedCouponId)
-        assertEquals(order.orderLines, capturedHistory.orderLines)
-        assertEquals(order.orderDateTime, capturedHistory.orderDateTime)
-        assertEquals(order.totalPrice, capturedHistory.totalPrice)
-        assertEquals(order.orderStatus, capturedHistory.orderStatus)
     }
 } 

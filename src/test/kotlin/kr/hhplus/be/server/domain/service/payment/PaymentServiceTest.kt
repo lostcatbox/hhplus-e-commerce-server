@@ -69,7 +69,7 @@ class PaymentServiceTest {
             active = true
         )
 
-        point = Point(id = -1, userId = userId, amount = 10000L)
+        point = Point(userId = userId, amount = 10000L)
 
         every { pointService.getPoint(userId) } returns point
 //        every { point.usePoint(userId) } returns usedPoint
@@ -80,7 +80,13 @@ class PaymentServiceTest {
     fun `쿠폰 없이 결제 처리`() {
         // Given
         val paymentSlot = slot<Payment>()
-        val orderWithoutCoupon = order.copy(issuedCouponId = null)
+        val orderWithoutCoupon = Order(
+            id = order.id,
+            userId = order.userId,
+            issuedCouponId = null,
+            orderLines = order.orderLines,
+            orderDateTime = order.orderDateTime, orderStatus = order.orderStatus
+        )
         every { paymentHistoryRepository.save(capture(paymentSlot)) } returnsArgument 0
 
         // When
