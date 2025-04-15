@@ -13,8 +13,9 @@ enum class OrderStatus {
 }
 
 @Entity(name = "orders")
-data class Order(
+class Order(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = -1L,
     val userId: Long,
     val issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
@@ -31,32 +32,52 @@ data class Order(
     val totalPrice: Long = orderLines.sumOf { it.totalPrice }
 
     fun readyProduct(): Order {
-        return this.copy(
+        return Order(
+            id = id,
+            userId = userId,
+            issuedCouponId = issuedCouponId,
+            orderLines = orderLines,
+            orderDateTime = orderDateTime,
             orderStatus = OrderStatus.상품_준비중
         )
     }
 
     fun readyPay(): Order {
-        return this.copy(
+        return Order(
+            id = id,
+            userId = userId,
+            issuedCouponId = issuedCouponId,
+            orderLines = orderLines,
+            orderDateTime = orderDateTime,
             orderStatus = OrderStatus.결제_대기중
         )
     }
 
     fun finishPay(): Order {
-        return this.copy(
+        return Order(
+            id = id,
+            userId = userId,
+            issuedCouponId = issuedCouponId,
+            orderLines = orderLines,
+            orderDateTime = orderDateTime,
             orderStatus = OrderStatus.결제_완료
         )
     }
 
     fun failOrder(): Order {
-        return this.copy(
+        return Order(
+            id = id,
+            userId = userId,
+            issuedCouponId = issuedCouponId,
+            orderLines = orderLines,
+            orderDateTime = orderDateTime,
             orderStatus = OrderStatus.주문_실패
         )
     }
 }
 
 @Embeddable
-data class OrderLine(
+class OrderLine(
     val productId: Long,
     val productPrice: Long,
     val quantity: Long,
@@ -65,7 +86,7 @@ data class OrderLine(
 }
 
 @Entity(name = "orderHistories")
-data class OrderHistory(
+class OrderHistory(
     @Id
     val id: Long = -1L,
     val orderId: Long,

@@ -1,12 +1,15 @@
 package kr.hhplus.be.server.domain.payment
 
 import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.LocalDateTime
 
 @Entity(name = "payments")
-data class Payment(
+class Payment(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val orderId: Long,
     val userId: Long,

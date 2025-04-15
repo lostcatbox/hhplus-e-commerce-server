@@ -1,12 +1,12 @@
 package kr.hhplus.be.server.domain.product
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import java.time.LocalDateTime
+import jakarta.persistence.*
+import java.time.LocalDate
 
 @Entity(name = "products")
-data class Product(
+class Product(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val name: String,
     val price: Long,
@@ -19,28 +19,38 @@ data class Product(
 
     //판매 요청 수량
     fun sale(saleAmount: Long): Product {
-        return this.copy(
+        return Product(
+            id = this.id,
+            name = this.name,
+            price = price,
             stock = stock - saleAmount
         )
     }
 }
 
 @Entity(name = "popular_products")
-data class PopularProduct(
-    @Id
-    val productId: Long,
+class PopularProduct(
+    @EmbeddedId
+    val popularProductId: PopularProductId,
     val orderCount: Long, // 하루당 총 주문량
-    val dateTime: LocalDateTime
 ) {
     fun saleCount(saleAmount: Long): PopularProduct {
-        return this.copy(
+        return PopularProduct(
+            popularProductId = popularProductId,
             orderCount = orderCount + saleAmount
         )
     }
 
     fun cancelSaleCount(cancelSaleAmount: Long): PopularProduct {
-        return this.copy(
+        return PopularProduct(
+            popularProductId = popularProductId,
             orderCount = orderCount - cancelSaleAmount
         )
     }
 }
+
+@Embeddable
+class PopularProductId(
+    val productId: Long,
+    val dateTime: LocalDate
+)

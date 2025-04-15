@@ -9,18 +9,18 @@ import java.time.LocalDateTime
 abstract class Coupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = -1L,
+    open val id: Long = -1L,
 
-    val name: String,
-    val stock: Long,
+    open val name: String,
+    open val stock: Long,
 
     @Column(name = "start_date")
-    val startDate: LocalDateTime,
+    open val startDate: LocalDateTime,
 
     @Column(name = "end_date")
-    val endDate: LocalDateTime,
+    open val endDate: LocalDateTime,
     @Column(name = "active")
-    val active: Boolean
+    open val active: Boolean = false
 ) {
     init {
         require(stock >= 0) { "재고는 0 이상이어야 합니다" }
