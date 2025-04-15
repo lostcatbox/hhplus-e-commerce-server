@@ -20,8 +20,8 @@ data class Order(
     val issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
     @ElementCollection
     @CollectionTable(
-        name = "order_history_lines",
-        joinColumns = [JoinColumn(name = "order_history_id")]
+        name = "order_lines",
+        joinColumns = [JoinColumn(name = "order_id")]
     )
     val orderLines: List<OrderLine>,
     val orderDateTime: LocalDateTime,
