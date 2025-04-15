@@ -85,13 +85,13 @@ class ProductTest {
             )
 
             // when
-            val soldProduct = product.sale(10L)
+            product.sale(10L)
 
             // then
-            soldProduct.stock shouldBe 90L
-            soldProduct.id shouldBe product.id
-            soldProduct.name shouldBe product.name
-            soldProduct.price shouldBe product.price
+            product.stock shouldBe 90L
+            product.id shouldBe product.id
+            product.name shouldBe product.name
+            product.price shouldBe product.price
         }
     }
 

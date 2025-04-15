@@ -30,7 +30,7 @@ class OrderServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val orderLines = listOf(
+        val orderLines = mutableListOf(
             OrderLine(
                 productId = 1L,
                 productPrice = 1000L,
@@ -61,7 +61,6 @@ class OrderServiceTest {
             orderId = 1L,
             userId = 1L,
             issuedCouponId = null,
-            orderLines = orderLines,
             orderDateTime = now,
             totalPrice = 2000L,
             orderStatus = OrderStatus.주문_요청됨

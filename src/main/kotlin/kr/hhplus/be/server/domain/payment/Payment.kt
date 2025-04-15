@@ -10,14 +10,14 @@ import java.time.LocalDateTime
 class Payment(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
-    val orderId: Long,
-    val userId: Long,
-    val payAmount: Long,
-    val status: PaymentStatus = PaymentStatus.PENDING,
-    val remainPointAmount: Long? = null,
-    val couponId: Long? = null,
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    var id: Long = 0L,
+    var orderId: Long,
+    var userId: Long,
+    var payAmount: Long,
+    var status: PaymentStatus = PaymentStatus.PENDING,
+    var remainPointAmount: Long? = null,
+    var couponId: Long? = null,
+    var createdAt: LocalDateTime = LocalDateTime.now()
 )
 
 enum class PaymentStatus {

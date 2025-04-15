@@ -9,18 +9,18 @@ import java.time.LocalDateTime
 abstract class Coupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open val id: Long = -1L,
+    open var id: Long = -1L,
 
-    open val name: String,
-    open val stock: Long,
+    open var name: String,
+    open var stock: Long,
 
     @Column(name = "start_date")
-    open val startDate: LocalDateTime,
+    open var startDate: LocalDateTime,
 
     @Column(name = "end_date")
-    open val endDate: LocalDateTime,
+    open var endDate: LocalDateTime,
     @Column(name = "active")
-    open val active: Boolean = false
+    open var active: Boolean = false
 ) {
     init {
         require(stock >= 0) { "재고는 0 이상이어야 합니다" }
@@ -28,7 +28,7 @@ abstract class Coupon(
     }
 
     fun isAvailable(): Boolean {
-        val now = LocalDateTime.now()
+        var now = LocalDateTime.now()
         return active &&
                 now.isAfter(startDate) &&
                 now.isBefore(endDate)
@@ -62,7 +62,7 @@ class AmountCoupon(
     startDate: LocalDateTime,
     endDate: LocalDateTime,
     active: Boolean,
-    val amount: Long
+    var amount: Long
 ) : Coupon(
     id, name, stock, startDate, endDate, active
 ) {
@@ -71,7 +71,7 @@ class AmountCoupon(
     }
 
     override fun discountAmount(originAmount: Long): Long {
-        val resultAmount = originAmount - amount
+        var resultAmount = originAmount - amount
         if (resultAmount < 0) {
             throw IllegalArgumentException("Amount는 0이상이여야합니다.")
         }
@@ -100,7 +100,7 @@ class PercentageCoupon(
     startDate: LocalDateTime,
     endDate: LocalDateTime,
     active: Boolean,
-    val percent: Double
+    var percent: Double
 ) : Coupon(
     id, name, stock, startDate, endDate, active
 ) {
@@ -129,16 +129,16 @@ class PercentageCoupon(
 data class IssuedCoupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = -1L,
+    var id: Long = -1L,
 
     @Column(name = "coupon_id")
-    val couponId: Long,
+    var couponId: Long,
 
     @Column(name = "user_id")
-    val userId: Long,
+    var userId: Long,
 
     @Column(name = "is_used")
-    val isUsed: Boolean
+    var isUsed: Boolean
 ) {
     fun canBeUsed(): Boolean {
         return !isUsed

@@ -42,7 +42,7 @@ class PaymentServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val orderLines = listOf(
+        val orderLines = mutableListOf(
             OrderLine(
                 productId = 1L,
                 productPrice = 1000L,

@@ -22,8 +22,8 @@ class ProductService(
         for (orderLine in orderLines) {
             val product = findById(orderLine.productId)
             // 재고 차감
-            val updatedProduct = product.sale(orderLine.quantity)
-            productRepository.save(updatedProduct)
+            product.sale(orderLine.quantity)
+            productRepository.save(product)
         }
     }
 }

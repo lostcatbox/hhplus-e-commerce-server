@@ -12,4 +12,8 @@ class OrderHistoryRepositoryImpl(
     override fun save(orderHistory: OrderHistory): OrderHistory {
         return orderHistoryJpaRepository.save(orderHistory)
     }
+
+    override fun findByOrderId(orderId: Long): List<OrderHistory> {
+        return orderHistoryJpaRepository.findByOrderId(orderId = orderId)
+    }
 } 
