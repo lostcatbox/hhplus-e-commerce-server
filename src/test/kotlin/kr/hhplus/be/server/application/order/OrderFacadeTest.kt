@@ -33,7 +33,7 @@ class OrderFacadeIntegrationTest {
     @Autowired
     private lateinit var orderHistoryRepository: OrderHistoryRepository
 
-    private var testProductId: Long = 0L
+    private var testProductId: Long = 1L
 
 
     @BeforeEach

@@ -128,7 +128,7 @@ class PaymentServiceTest {
         assert(capturedPayment.userId == userId)
         assert(capturedPayment.payAmount == discountedAmount)
         assert(capturedPayment.status == PaymentStatus.COMPLETED)
-        assert(capturedPayment.remainPointAmount == point.amount - discountedAmount)
+        assert(capturedPayment.remainPointAmount == 10000L - discountedAmount)
         assert(capturedPayment.couponId == order.issuedCouponId)
     }
 } 
