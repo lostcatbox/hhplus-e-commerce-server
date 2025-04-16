@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 abstract class Coupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open var id: Long = -1L,
+    open var id: Long = 0L,
 
     open var name: String,
     open var stock: Long,
@@ -56,7 +56,7 @@ abstract class Coupon(
 @Entity
 @DiscriminatorValue("AMOUNT")
 class AmountCoupon(
-    id: Long = -1L,
+    id: Long = 0L,
     name: String,
     stock: Long,
     startDate: LocalDateTime,
@@ -129,7 +129,7 @@ class PercentageCoupon(
 data class IssuedCoupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1L,
+    var id: Long = 0L,
 
     @Column(name = "coupon_id")
     var couponId: Long,
