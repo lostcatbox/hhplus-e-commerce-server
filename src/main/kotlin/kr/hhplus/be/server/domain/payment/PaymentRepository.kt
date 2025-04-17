@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.payment
 
-interface PaymentHistoryRepository {
+interface PaymentRepository {
     fun save(payment: Payment)
+    fun findByOrderId(orderId: Long): Payment
 }

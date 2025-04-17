@@ -12,4 +12,8 @@ class UserRepositoryImpl(
     override fun findById(userId: Long): User? {
         return userJpaRepository.findById(userId).orElse(null)
     }
+
+    override fun save(user: User): User {
+        return userJpaRepository.save(user)
+    }
 } 

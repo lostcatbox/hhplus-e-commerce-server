@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class PaymentService(
     val pointService: PointService,
-    val paymentHistoryRepository: PaymentHistoryRepository
+    val paymentRepository: PaymentRepository
 ) {
     @Transactional
     fun pay(order: Order, coupon: Coupon?) {
@@ -34,6 +34,6 @@ class PaymentService(
             remainPointAmount = point.amount,
             couponId = order.issuedCouponId
         )
-        paymentHistoryRepository.save(payment)
+        paymentRepository.save(payment)
     }
 }

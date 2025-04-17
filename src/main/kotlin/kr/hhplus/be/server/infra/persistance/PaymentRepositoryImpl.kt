@@ -1,15 +1,19 @@
 package kr.hhplus.be.server.infra.persistance
 
 import kr.hhplus.be.server.domain.payment.Payment
-import kr.hhplus.be.server.domain.payment.PaymentHistoryRepository
+import kr.hhplus.be.server.domain.payment.PaymentRepository
 import kr.hhplus.be.server.infra.persistance.jpa.PaymentJpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class PaymentHistoryRepositoryImpl(
+class PaymentRepositoryImpl(
     private val paymentJpaRepository: PaymentJpaRepository
-) : PaymentHistoryRepository {
+) : PaymentRepository {
     override fun save(payment: Payment) {
         paymentJpaRepository.save(payment)
+    }
+
+    override fun findByOrderId(orderId: Long): Payment {
+        return paymentJpaRepository.findByOrderId(orderId)
     }
 } 

@@ -17,8 +17,8 @@ class ProductRepositoryImpl(
         return productJPARepository.findAll()
     }
 
-    override fun save(product: Product) {
-        productJPARepository.save(product)
+    override fun save(product: Product): Product {
+        return productJPARepository.save(product)
     }
 
 }

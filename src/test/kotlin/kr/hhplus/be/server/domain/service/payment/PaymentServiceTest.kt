@@ -12,7 +12,7 @@ import kr.hhplus.be.server.domain.order.Order
 import kr.hhplus.be.server.domain.order.OrderLine
 import kr.hhplus.be.server.domain.order.OrderStatus
 import kr.hhplus.be.server.domain.payment.Payment
-import kr.hhplus.be.server.domain.payment.PaymentHistoryRepository
+import kr.hhplus.be.server.domain.payment.PaymentRepository
 import kr.hhplus.be.server.domain.payment.PaymentService
 import kr.hhplus.be.server.domain.payment.PaymentStatus
 import kr.hhplus.be.server.domain.point.Point
@@ -29,7 +29,7 @@ class PaymentServiceTest {
     private lateinit var pointService: PointService
 
     @MockK
-    private lateinit var paymentHistoryRepository: PaymentHistoryRepository
+    private lateinit var paymentRepository: PaymentRepository
 
     @InjectMockKs
     private lateinit var paymentService: PaymentService
@@ -73,7 +73,7 @@ class PaymentServiceTest {
 
         every { pointService.getPoint(userId) } returns point
 //        every { point.usePoint(userId) } returns usedPoint
-        every { paymentHistoryRepository.save(any()) } returnsArgument 0
+        every { paymentRepository.save(any()) } returnsArgument 0
     }
 
     @Test
@@ -87,7 +87,7 @@ class PaymentServiceTest {
             orderLines = order.orderLines,
             orderDateTime = order.orderDateTime, orderStatus = order.orderStatus
         )
-        every { paymentHistoryRepository.save(capture(paymentSlot)) } returnsArgument 0
+        every { paymentRepository.save(capture(paymentSlot)) } returnsArgument 0
 
         // When
         paymentService.pay(orderWithoutCoupon, null)
@@ -95,7 +95,7 @@ class PaymentServiceTest {
         // Then
         verify(exactly = 1) { pointService.getPoint(userId) }
 //        verify(exactly = 1) { point.usePoint(userId) }
-        verify(exactly = 1) { paymentHistoryRepository.save(any()) }
+        verify(exactly = 1) { paymentRepository.save(any()) }
 
         val capturedPayment = paymentSlot.captured
         assert(capturedPayment.orderId == order.id)
@@ -112,7 +112,7 @@ class PaymentServiceTest {
         val paymentSlot = slot<Payment>()
         val discountedAmount = 1800L // 10% 할인 적용 (2000 * 0.9)
 //        every { coupon.discountAmount(order.totalPrice) } returns discountedAmount
-        every { paymentHistoryRepository.save(capture(paymentSlot)) } returnsArgument 0
+        every { paymentRepository.save(capture(paymentSlot)) } returnsArgument 0
 
         // When
         paymentService.pay(order, coupon)
@@ -121,7 +121,7 @@ class PaymentServiceTest {
         verify(exactly = 1) { pointService.getPoint(userId) }
 //        verify(exactly = 1) { coupon.discountAmount(order.totalPrice) }
 //        verify(exactly = 1) { point.usePoint(userId) }
-        verify(exactly = 1) { paymentHistoryRepository.save(any()) }
+        verify(exactly = 1) { paymentRepository.save(any()) }
 
         val capturedPayment = paymentSlot.captured
         assert(capturedPayment.orderId == order.id)

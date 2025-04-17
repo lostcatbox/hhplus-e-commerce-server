@@ -79,22 +79,15 @@ class AmountCoupon(
     }
 
     override fun createWithDecreasedStock(): Coupon {
-        return AmountCoupon(
-            id = id,
-            name = name,
-            stock = stock - 1,
-            startDate = startDate,
-            endDate = endDate,
-            amount = amount,
-            active = active
-        )
+        this.stock -= 1
+        return this
     }
 }
 
 @Entity
 @DiscriminatorValue("PERCENTAGE")
 class PercentageCoupon(
-    id: Long = -1L,
+    id: Long = 0L,
     name: String,
     stock: Long,
     startDate: LocalDateTime,
@@ -113,20 +106,13 @@ class PercentageCoupon(
     }
 
     override fun createWithDecreasedStock(): Coupon {
-        return PercentageCoupon(
-            id = id,
-            name = name,
-            stock = stock - 1,
-            startDate = startDate,
-            endDate = endDate,
-            percent = percent,
-            active = active
-        )
+        this.stock -= 1
+        return this
     }
 }
 
 @Entity(name = "issued_coupons")
-data class IssuedCoupon(
+class IssuedCoupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0L,
@@ -146,7 +132,8 @@ data class IssuedCoupon(
 
     fun useCoupon(): IssuedCoupon {
         require(!isUsed) { "이미 사용된 쿠폰압니다. IssuedCoupon.couponId: $couponId" }
-        return this.copy(isUsed = true)
+        this.isUsed = true
+        return this
     }
 }
 

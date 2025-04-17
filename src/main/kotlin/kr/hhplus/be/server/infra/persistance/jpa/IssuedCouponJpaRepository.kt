@@ -12,4 +12,5 @@ interface IssuedCouponJpaRepository : JpaRepository<IssuedCoupon, Long> {
     @Query("SELECT ic FROM issued_coupons ic WHERE ic.id = :issuedCouponId")
     fun findByIdWithPessimisticLock(@Param("issuedCouponId") issuedCouponId: Long): IssuedCoupon?
     fun findAllByUserId(userId: Long): List<IssuedCoupon>
-} 
+    fun findOneByUserIdAndCouponId(userId: Long, couponId: Long): IssuedCoupon
+}
