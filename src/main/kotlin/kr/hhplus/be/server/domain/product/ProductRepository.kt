@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 interface ProductRepository {
     fun findById(productId: Long): Product?
     fun findAll(): List<Product>
-    fun save(product: Product)
+    fun save(product: Product): Product
 }

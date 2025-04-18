@@ -12,6 +12,7 @@ class CouponControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
+    
 
     @Test
     fun `GET 쿠폰 리스트 조회 - 200 Ok`() {

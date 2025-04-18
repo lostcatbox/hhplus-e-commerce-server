@@ -42,9 +42,9 @@ class UserServiceTest {
             active = false
         )
 
-        every { userRepository.findByUserId(userId) } returns user
-        every { userRepository.findByUserId(2L) } returns inactiveUser
-        every { userRepository.findByUserId(999L) } returns null
+        every { userRepository.findById(userId) } returns user
+        every { userRepository.findById(2L) } returns inactiveUser
+        every { userRepository.findById(999L) } returns null
     }
 
     @Test
@@ -56,7 +56,7 @@ class UserServiceTest {
         assertEquals(userId, result.id)
         assertEquals("테스트 사용자", result.name)
         assertTrue(result.active)
-        verify(exactly = 1) { userRepository.findByUserId(userId) }
+        verify(exactly = 1) { userRepository.findById(userId) }
     }
 
     @Test
@@ -65,7 +65,7 @@ class UserServiceTest {
         assertThrows<UserNotFoundException> {
             userService.getUserByUserId(999L)
         }
-        verify(exactly = 1) { userRepository.findByUserId(999L) }
+        verify(exactly = 1) { userRepository.findById(999L) }
     }
 
     @Test
@@ -78,7 +78,7 @@ class UserServiceTest {
 
         // Then
         assertTrue(result)
-        verify(exactly = 1) { userRepository.findByUserId(userId) }
+        verify(exactly = 1) { userRepository.findById(userId) }
 //        verify(exactly = 1) { user.isActive() }
     }
 
@@ -92,7 +92,7 @@ class UserServiceTest {
 
         // Then
         assertFalse(result)
-        verify(exactly = 1) { userRepository.findByUserId(2L) }
+        verify(exactly = 1) { userRepository.findById(2L) }
 //        verify(exactly = 1) { inactiveUser.isActive() }
     }
 
@@ -103,6 +103,6 @@ class UserServiceTest {
 
         // Then
         assertFalse(result)
-        verify(exactly = 1) { userRepository.findByUserId(999L) }
+        verify(exactly = 1) { userRepository.findById(999L) }
     }
 } 

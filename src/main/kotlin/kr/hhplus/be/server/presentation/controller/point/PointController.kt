@@ -26,7 +26,7 @@ class PointController {
                 amount = 10000L
             )
         )
-    }
+    } 
 
     @Operation(summary = "유저 포인트 충전", description = "200 성공 테스트 가능")
     @ApiResponses(

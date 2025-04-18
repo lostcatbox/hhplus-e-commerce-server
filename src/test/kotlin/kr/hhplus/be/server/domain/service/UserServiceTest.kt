@@ -16,7 +16,7 @@ class UserServiceTest {
         val userService = UserService(userRepository)
 
         // when
-        every { userRepository.findByUserId(any()) } returns null
+        every { userRepository.findById(any()) } returns null
 
         // then
         shouldThrow<UserNotFoundException> {

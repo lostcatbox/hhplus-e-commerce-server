@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.application.order
 
-import kr.hhplus.be.server.domain.order.Order
 import kr.hhplus.be.server.domain.coupon.CouponService
+import kr.hhplus.be.server.domain.order.Order
 import kr.hhplus.be.server.domain.order.OrderService
 import kr.hhplus.be.server.domain.payment.PaymentService
 import kr.hhplus.be.server.domain.product.ProductService
@@ -23,17 +23,17 @@ class OrderFacade(
     fun processOrder(order: Order) {
         // 1. 유저 검증
         userService.checkActiveUser(order.userId)
-        // 2. 유저 검증
+        // 2. 상품 준비중 상태로 변경
         val productReadyOrder = orderService.changeProductReady(order)
         // 3. 상품 재고 확인 및 차감
         productService.saleOrderProducts(order.orderLines)
         // 4. 발급된 쿠폰 사용 및 쿠폰 정보 조회
         val coupon = couponService.useIssuedCoupon(order.issuedCouponId)
-        // 5. 결제 대기 상태로 전환
+        // 5. 결제 대기 상태로 변경
         val readyForPaymentOrder = orderService.changePaymentReady(productReadyOrder)
         // 6. 결제 처리
         paymentService.pay(readyForPaymentOrder, coupon)
-        // 7. 결제 결과에 따른 처리
+        // 7. 결제 성공 상태로 변경
         orderService.changePaymentComplete(readyForPaymentOrder)
     }
 } 

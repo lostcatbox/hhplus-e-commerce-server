@@ -6,13 +6,14 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import kr.hhplus.be.server.domain.product.PopularProduct
+import kr.hhplus.be.server.domain.product.PopularProductId
 import kr.hhplus.be.server.domain.product.ProductStatisticRepository
 import kr.hhplus.be.server.domain.product.ProductStatisticService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 @ExtendWith(MockKExtension::class)
 class ProductStatisticServiceTest {
@@ -27,21 +28,28 @@ class ProductStatisticServiceTest {
 
     @BeforeEach
     fun setUp() {
+        val now = LocalDate.now()
         popularProducts = listOf(
             PopularProduct(
-                productId = 1L,
-                orderCount = 100L,
-                dateTime = LocalDateTime.now()
+                PopularProductId(
+                    productId = 1L,
+                    dateTime = now
+                ),
+                orderCount = 100L
             ),
             PopularProduct(
-                productId = 2L,
-                orderCount = 80L,
-                dateTime = LocalDateTime.now()
+                PopularProductId(
+                    productId = 2L,
+                    dateTime = now
+                ),
+                orderCount = 80L
             ),
             PopularProduct(
-                productId = 3L,
+                PopularProductId(
+                    productId = 3L,
+                    dateTime = now
+                ),
                 orderCount = 60L,
-                dateTime = LocalDateTime.now()
             )
         )
 
@@ -55,7 +63,7 @@ class ProductStatisticServiceTest {
 
         // Then
         assertEquals(3, result.size)
-        assertEquals(popularProducts[0].productId, result[0].productId)
+        assertEquals(popularProducts[0].popularProductId.productId, result[0].popularProductId.productId)
         assertEquals(popularProducts[0].orderCount, result[0].orderCount)
         verify(exactly = 1) { productStatisticRepository.findPopularProducts() }
     }

@@ -33,7 +33,7 @@ class CouponService(
             return null
         }
         val issuedCouponById = couponRepository.findIssuedCouponById(issuedCouponId)
-        issuedCouponById.useCoupon()
+        couponRepository.save(issuedCouponById.useCoupon())
         return couponRepository.findById(issuedCouponById.couponId)
     }
 }

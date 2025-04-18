@@ -3,10 +3,11 @@ package kr.hhplus.be.server.domain.model
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import kr.hhplus.be.server.domain.product.PopularProduct
+import kr.hhplus.be.server.domain.product.PopularProductId
 import kr.hhplus.be.server.domain.product.Product
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
-import java.time.LocalDateTime
+import java.time.LocalDate
 import kotlin.test.Test
 
 class ProductTest {
@@ -84,46 +85,51 @@ class ProductTest {
             )
 
             // when
-            val soldProduct = product.sale(10L)
+            product.sale(10L)
 
             // then
-            soldProduct.stock shouldBe 90L
-            soldProduct.id shouldBe product.id
-            soldProduct.name shouldBe product.name
-            soldProduct.price shouldBe product.price
+            product.stock shouldBe 90L
+            product.id shouldBe product.id
+            product.name shouldBe product.name
+            product.price shouldBe product.price
         }
     }
 
     @Nested
     @DisplayName("PopularProduct 테스트")
     inner class PopularProductTest {
-        private val now = LocalDateTime.now()
+        private val now = LocalDate.now()
 
         @Test
         fun `인기 상품 판매량 증가`() {
             // given
             val popularProduct = PopularProduct(
-                productId = 1L,
+                PopularProductId(
+                    productId = 1L,
+                    dateTime = now
+                ),
                 orderCount = 100L,
-                dateTime = now
-            )
+
+                )
 
             // when
             val result = popularProduct.saleCount(10L)
 
             // then
             result.orderCount shouldBe 110L
-            result.productId shouldBe popularProduct.productId
-            result.dateTime shouldBe popularProduct.dateTime
+            result.popularProductId.productId shouldBe popularProduct.popularProductId.productId
+            result.popularProductId.dateTime shouldBe popularProduct.popularProductId.dateTime
         }
 
         @Test
         fun `인기 상품 판매량 취소`() {
             // given
             val popularProduct = PopularProduct(
-                productId = 1L,
-                orderCount = 100L,
-                dateTime = now
+                PopularProductId(
+                    productId = 1L,
+                    dateTime = now
+                ),
+                orderCount = 100L
             )
 
             // when
@@ -131,23 +137,26 @@ class ProductTest {
 
             // then
             result.orderCount shouldBe 90L
-            result.productId shouldBe popularProduct.productId
-            result.dateTime shouldBe popularProduct.dateTime
+            result.popularProductId.productId shouldBe popularProduct.popularProductId.productId
+            result.popularProductId.dateTime shouldBe popularProduct.popularProductId.dateTime
         }
 
         @Test
         fun `인기 상품 생성`() {
             // when
             val popularProduct = PopularProduct(
-                productId = 1L,
+                PopularProductId(
+                    productId = 1L,
+                    dateTime = now
+                ),
                 orderCount = 0L,
-                dateTime = now
-            )
+
+                )
 
             // then
-            popularProduct.productId shouldBe 1L
+            popularProduct.popularProductId.productId shouldBe 1L
             popularProduct.orderCount shouldBe 0L
-            popularProduct.dateTime shouldBe now
+            popularProduct.popularProductId.dateTime shouldBe now
         }
     }
 }

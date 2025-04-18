@@ -19,11 +19,11 @@ class PointTest {
             val useAmount = 3000L
 
             // when
-            val resultPoint = point.usePoint(useAmount)
+            point.usePoint(useAmount)
 
             // then
-            resultPoint.amount shouldBe 7000L
-            resultPoint.userId shouldBe 1L
+            point.amount shouldBe 7000L
+            point.userId shouldBe 1L
         }
 
         @Test
@@ -45,10 +45,10 @@ class PointTest {
             val useAmount = 1000L
 
             // when
-            val resultPoint = point.usePoint(useAmount)
+            point.usePoint(useAmount)
 
             // then
-            resultPoint.amount shouldBe 0L
+            point.amount shouldBe 0L
         }
     }
 
@@ -62,11 +62,11 @@ class PointTest {
             val chargeAmount = 5000L
 
             // when
-            val resultPoint = point.chargePoint(chargeAmount)
+            point.chargePoint(chargeAmount)
 
             // then
-            resultPoint.amount shouldBe 6000L
-            resultPoint.userId shouldBe 1L
+            point.amount shouldBe 6000L
+            point.userId shouldBe 1L
         }
 
         @Test
@@ -100,10 +100,10 @@ class PointTest {
             val chargeAmount = 1000000L
 
             // when
-            val resultPoint = point.chargePoint(chargeAmount)
+            point.chargePoint(chargeAmount)
 
             // then
-            resultPoint.amount shouldBe 1001000L
+            point.amount shouldBe 1001000L
         }
     }
 
