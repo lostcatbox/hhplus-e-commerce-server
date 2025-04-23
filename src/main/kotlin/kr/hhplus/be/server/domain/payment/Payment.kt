@@ -2,8 +2,9 @@ package kr.hhplus.be.server.domain.payment
 
 import java.time.LocalDateTime
 
-data class Payment(
-    val id: Long,
+// 순수 도메인 모델로 변경
+class Payment(
+    val id: Long = 0L,
     val orderId: Long,
     val userId: Long,
     val payAmount: Long,

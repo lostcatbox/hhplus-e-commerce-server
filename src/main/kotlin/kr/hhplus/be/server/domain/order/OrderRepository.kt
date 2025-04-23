@@ -5,4 +5,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface OrderRepository {
     fun save(order: Order): Order
+    fun findByIdWithPessimisticLock(orderId: Long): Order?
+    fun findById(orderId: Long): Order?
+    fun findAll(): List<Order>
 }

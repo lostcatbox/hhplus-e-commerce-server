@@ -42,9 +42,9 @@ class UserServiceTest {
             active = false
         )
 
-        every { userRepository.findByUserId(userId) } returns user
-        every { userRepository.findByUserId(2L) } returns inactiveUser
-        every { userRepository.findByUserId(999L) } returns null
+        every { userRepository.findById(userId) } returns user
+        every { userRepository.findById(2L) } returns inactiveUser
+        every { userRepository.findById(999L) } returns null
     }
 
     @Test
@@ -56,7 +56,7 @@ class UserServiceTest {
         assertEquals(userId, result.id)
         assertEquals("테스트 사용자", result.name)
         assertTrue(result.active)
-        verify(exactly = 1) { userRepository.findByUserId(userId) }
+        verify(exactly = 1) { userRepository.findById(userId) }
     }
 
     @Test
@@ -65,35 +65,27 @@ class UserServiceTest {
         assertThrows<UserNotFoundException> {
             userService.getUserByUserId(999L)
         }
-        verify(exactly = 1) { userRepository.findByUserId(999L) }
+        verify(exactly = 1) { userRepository.findById(999L) }
     }
 
     @Test
     fun `활성 사용자 확인 - 활성 상태인 경우`() {
-        // Given
-//        every { user.isActive() } returns true
-
         // When
         val result = userService.checkActiveUser(userId)
 
         // Then
         assertTrue(result)
-        verify(exactly = 1) { userRepository.findByUserId(userId) }
-//        verify(exactly = 1) { user.isActive() }
+        verify(exactly = 1) { userRepository.findById(userId) }
     }
 
     @Test
     fun `활성 사용자 확인 - 비활성 상태인 경우`() {
-        // Given
-//        every { inactiveUser.isActive() } returns false
-
         // When
         val result = userService.checkActiveUser(2L)
 
         // Then
         assertFalse(result)
-        verify(exactly = 1) { userRepository.findByUserId(2L) }
-//        verify(exactly = 1) { inactiveUser.isActive() }
+        verify(exactly = 1) { userRepository.findById(2L) }
     }
 
     @Test
@@ -103,6 +95,6 @@ class UserServiceTest {
 
         // Then
         assertFalse(result)
-        verify(exactly = 1) { userRepository.findByUserId(999L) }
+        verify(exactly = 1) { userRepository.findById(999L) }
     }
 } 

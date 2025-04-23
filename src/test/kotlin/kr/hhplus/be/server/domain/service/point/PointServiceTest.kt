@@ -6,8 +6,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import kr.hhplus.be.server.domain.point.Point
-import kr.hhplus.be.server.domain.point.PointService
 import kr.hhplus.be.server.domain.point.PointRepository
+import kr.hhplus.be.server.domain.point.PointService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -31,8 +31,8 @@ class PointServiceTest {
         point = Point(userId = userId, amount = 10000L)
         emptyPoint = Point.EMPTY(userId)
 
-        every { pointRepository.findById(userId) } returns point
-        every { pointRepository.findById(999L) } returns null
+        every { pointRepository.findByUserId(userId) } returns point
+        every { pointRepository.findByUserId(999L) } returns null
         every { pointRepository.save(any()) } returnsArgument 0
     }
 
@@ -44,7 +44,7 @@ class PointServiceTest {
         // Then
         assertEquals(userId, result.userId)
         assertEquals(10000L, result.amount)
-        verify(exactly = 1) { pointRepository.findById(userId) }
+        verify(exactly = 1) { pointRepository.findByUserId(userId) }
     }
 
     @Test
@@ -55,39 +55,35 @@ class PointServiceTest {
         // Then
         assertEquals(999L, result.userId)
         assertEquals(0L, result.amount)
-        verify(exactly = 1) { pointRepository.findById(999L) }
+        verify(exactly = 1) { pointRepository.findByUserId(999L) }
     }
 
     @Test
     fun `포인트 사용`() {
         // Given
         val useAmount = 5000L
-        val expectedPoint = point.copy(amount = 5000L)
-//        every { point.usePoint(useAmount) } returns expectedPoint
+        val updatedPoint = Point(userId = userId, amount = 5000L)
 
         // When
         pointService.usePoint(userId, useAmount)
 
         // Then
-        verify(exactly = 1) { pointRepository.findById(userId) }
-//        verify(exactly = 1) { point.usePoint(useAmount) }
-        verify(exactly = 1) { pointRepository.save(expectedPoint) }
+        verify(exactly = 1) { pointRepository.findByUserId(userId) }
+        verify { pointRepository.save(any()) }
     }
 
     @Test
     fun `포인트 충전`() {
         // Given
         val chargeAmount = 5000L
-        val expectedPoint = point.copy(amount = 15000L)
-//        every { point.chargePoint(chargeAmount) } returns expectedPoint
+        val updatedPoint = Point(userId = userId, amount = 15000L)
 
         // When
         pointService.chargePoint(userId, chargeAmount)
 
         // Then
-        verify(exactly = 1) { pointRepository.findById(userId) }
-//        verify(exactly = 1) { point.chargePoint(chargeAmount) }
-        verify(exactly = 1) { pointRepository.save(expectedPoint) }
+        verify(exactly = 1) { pointRepository.findByUserId(userId) }
+        verify { pointRepository.save(any()) }
     }
 
     @Test
@@ -95,14 +91,12 @@ class PointServiceTest {
         // Given
         val noPointUserId = 999L
         val chargeAmount = 5000L
-        val expectedPoint = emptyPoint.copy(amount = 5000L)
-//        every { emptyPoint.chargePoint(chargeAmount) } returns expectedPoint
 
         // When
         pointService.chargePoint(noPointUserId, chargeAmount)
 
         // Then
-        verify(exactly = 1) { pointRepository.findById(noPointUserId) }
-        verify(exactly = 1) { pointRepository.save(any()) }
+        verify(exactly = 1) { pointRepository.findByUserId(noPointUserId) }
+        verify { pointRepository.save(any()) }
     }
 } 

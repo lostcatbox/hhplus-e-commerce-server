@@ -21,12 +21,6 @@ data class CouponResponse(
     @Schema(description = "할인 값 (금액할인: 원, 비율할인: %)", example = "10000")
     val discountValue: Int,
 
-    @Schema(description = "사용 시작일", example = "2024-04-01T00:00:00")
-    val startDate: LocalDateTime,
-
-    @Schema(description = "사용 종료일", example = "2024-04-30T23:59:59")
-    val endDate: LocalDateTime,
-
     @Schema(description = "사용 가능 여부", example = "true")
     val isActive: Boolean,
 

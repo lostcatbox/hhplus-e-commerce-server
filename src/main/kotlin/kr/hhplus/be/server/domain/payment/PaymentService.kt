@@ -10,11 +10,10 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class PaymentService(
     val pointService: PointService,
-    val paymentHistoryRepository: PaymentHistoryRepository
+    val paymentRepository: PaymentRepository
 ) {
     @Transactional
     fun pay(order: Order, coupon: Coupon?) {
-        val point = pointService.getPoint(order.userId)
         var finalPayAmount = order.totalPrice
 
         // 쿠폰 존재 시 사용
@@ -23,18 +22,18 @@ class PaymentService(
         }
 
         // 포인트 결제 처리
-        val usedPoint = point.usePoint(finalPayAmount)
+        pointService.usePoint(order.userId, finalPayAmount)
+        val updatedPoint = pointService.getPoint(order.userId)
 
         // 결제 정보 생성
         val payment = Payment(
-            id = -1L,
             orderId = order.id,
             userId = order.userId,
             payAmount = finalPayAmount,
             status = PaymentStatus.COMPLETED,
-            remainPointAmount = usedPoint.amount,
+            remainPointAmount = updatedPoint.amount,
             couponId = order.issuedCouponId
         )
-        paymentHistoryRepository.save(payment)
+        paymentRepository.save(payment)
     }
 }

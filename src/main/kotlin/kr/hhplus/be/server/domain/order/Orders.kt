@@ -11,8 +11,9 @@ enum class OrderStatus {
     주문_실패
 }
 
+// 순수 도메인 모델로 변경
 data class Order(
-    val id: Long = -1L,
+    val id: Long = 0L,
     val userId: Long,
     val issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
     val orderLines: List<OrderLine>,
@@ -46,8 +47,8 @@ data class Order(
     }
 }
 
+// 순수 도메인 모델로 변경
 data class OrderLine(
-    val orderId: Long,
     val productId: Long,
     val productPrice: Long,
     val quantity: Long,
@@ -55,12 +56,12 @@ data class OrderLine(
     val totalPrice: Long = productPrice * quantity
 }
 
+// 순수 도메인 모델로 변경
 data class OrderHistory(
-    val id: Long = -1L,
+    val id: Long = 0L,
     val orderId: Long,
     val userId: Long,
     val issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
-    val orderLines: List<OrderLine>,
     val orderDateTime: LocalDateTime,
     val totalPrice: Long,
     val orderStatus: OrderStatus  // 주문요청됨, 상품준비중, 결제 대기중, 결제 완료, 주문실패

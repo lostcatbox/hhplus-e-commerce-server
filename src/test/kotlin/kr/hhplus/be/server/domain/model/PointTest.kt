@@ -19,11 +19,13 @@ class PointTest {
             val useAmount = 3000L
 
             // when
-            val resultPoint = point.usePoint(useAmount)
+            val usedPoint = point.usePoint(useAmount)
 
             // then
-            resultPoint.amount shouldBe 7000L
-            resultPoint.userId shouldBe 1L
+            usedPoint.amount shouldBe 7000L
+            usedPoint.userId shouldBe 1L
+            // 원본 포인트는 변경되지 않음
+            point.amount shouldBe 10000L
         }
 
         @Test
@@ -45,10 +47,12 @@ class PointTest {
             val useAmount = 1000L
 
             // when
-            val resultPoint = point.usePoint(useAmount)
+            val usedPoint = point.usePoint(useAmount)
 
             // then
-            resultPoint.amount shouldBe 0L
+            usedPoint.amount shouldBe 0L
+            // 원본 포인트는 변경되지 않음
+            point.amount shouldBe 1000L
         }
     }
 
@@ -62,11 +66,13 @@ class PointTest {
             val chargeAmount = 5000L
 
             // when
-            val resultPoint = point.chargePoint(chargeAmount)
+            val chargedPoint = point.chargePoint(chargeAmount)
 
             // then
-            resultPoint.amount shouldBe 6000L
-            resultPoint.userId shouldBe 1L
+            chargedPoint.amount shouldBe 6000L
+            chargedPoint.userId shouldBe 1L
+            // 원본 포인트는 변경되지 않음
+            point.amount shouldBe 1000L
         }
 
         @Test
@@ -100,10 +106,12 @@ class PointTest {
             val chargeAmount = 1000000L
 
             // when
-            val resultPoint = point.chargePoint(chargeAmount)
+            val chargedPoint = point.chargePoint(chargeAmount)
 
             // then
-            resultPoint.amount shouldBe 1001000L
+            chargedPoint.amount shouldBe 1001000L
+            // 원본 포인트는 변경되지 않음
+            point.amount shouldBe 1000L
         }
     }
 
