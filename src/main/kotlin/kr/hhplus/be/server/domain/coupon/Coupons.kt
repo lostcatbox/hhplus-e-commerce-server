@@ -7,20 +7,14 @@ abstract class Coupon(
     open val id: Long = 0L,
     open val name: String,
     open val stock: Long,
-    open val startDate: LocalDateTime,
-    open val endDate: LocalDateTime,
     open val active: Boolean = false
 ) {
     init {
         require(stock >= 0) { "재고는 0 이상이어야 합니다" }
-        require(startDate <= endDate) { "시작일이 종료일보다 늦을 수 없습니다" }
     }
 
     fun isAvailable(): Boolean {
-        var now = LocalDateTime.now()
-        return active &&
-                now.isAfter(startDate) &&
-                now.isBefore(endDate)
+        return active && stock > 0
     }
 
     abstract fun discountAmount(originAmount: Long): Long
@@ -47,12 +41,10 @@ class AmountCoupon(
     override val id: Long = 0L,
     override val name: String,
     override val stock: Long,
-    override val startDate: LocalDateTime,
-    override val endDate: LocalDateTime,
     override val active: Boolean,
     val amount: Long
 ) : Coupon(
-    id, name, stock, startDate, endDate, active
+    id, name, stock, active
 ) {
     init {
         require(amount > 0) { "할인 금액은 0보다 커야 합니다" }
@@ -71,8 +63,6 @@ class AmountCoupon(
             id = this.id,
             name = this.name,
             stock = this.stock - 1,
-            startDate = this.startDate,
-            endDate = this.endDate,
             active = this.active,
             amount = this.amount
         )
@@ -84,12 +74,10 @@ class PercentageCoupon(
     override val id: Long = 0L,
     override val name: String,
     override val stock: Long,
-    override val startDate: LocalDateTime,
-    override val endDate: LocalDateTime,
     override val active: Boolean,
     val percent: Double
 ) : Coupon(
-    id, name, stock, startDate, endDate, active
+    id, name, stock, active
 ) {
     init {
         require(percent > 0 && percent <= 100) { "할인율은 0%초과 100%이하여야 합니다" }
@@ -104,8 +92,6 @@ class PercentageCoupon(
             id = this.id,
             name = this.name,
             stock = this.stock - 1,
-            startDate = this.startDate,
-            endDate = this.endDate,
             active = this.active,
             percent = this.percent
         )

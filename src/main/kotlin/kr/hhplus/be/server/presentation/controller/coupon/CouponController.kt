@@ -30,8 +30,6 @@ class CouponController {
                     name = "신규가입 금액 할인쿠폰",
                     type = CouponType.AMOUNT,
                     discountValue = 10000,
-                    startDate = LocalDateTime.now(),
-                    endDate = LocalDateTime.now(),
                     isActive = true,
                     remainingStock = 1
                 ),
@@ -40,8 +38,6 @@ class CouponController {
                     name = "신규가입 퍼센트할인쿠폰",
                     type = CouponType.PERCENTAGE,
                     discountValue = 10,
-                    startDate = LocalDateTime.now(),
-                    endDate = LocalDateTime.now(),
                     isActive = true,
                     remainingStock = 1
                 )

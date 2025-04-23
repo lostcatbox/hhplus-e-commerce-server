@@ -16,24 +16,18 @@ class OrderEntity(
     
     val issuedCouponId: Long? = null,
     
-    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(name = "order_id")
-    val orderLineEntities: MutableList<OrderLineEntity> = mutableListOf(),
-    
     val orderDateTime: LocalDateTime,
     
     @Enumerated(EnumType.STRING)
     val orderStatus: OrderStatus = OrderStatus.주문_요청됨
 ) {
-    val totalPrice: Long = orderLineEntities.sumOf { it.totalPrice }
-    
-    // 도메인 모델로 변환
-    fun toDomain(): Order {
+    // 도메인 모델로 변환 - orderLines를 외부에서 주입받음
+    fun toDomain(orderLines: List<OrderLine> = emptyList()): Order {
         return Order(
             id = this.id,
             userId = this.userId,
             issuedCouponId = this.issuedCouponId,
-            orderLines = this.orderLineEntities.map { it.toDomain() },
+            orderLines = orderLines,
             orderDateTime = this.orderDateTime,
             orderStatus = this.orderStatus
         )
@@ -46,7 +40,6 @@ class OrderEntity(
                 id = domain.id,
                 userId = domain.userId,
                 issuedCouponId = domain.issuedCouponId,
-                orderLineEntities = domain.orderLines.map { OrderLineEntity.from(it) }.toMutableList(),
                 orderDateTime = domain.orderDateTime,
                 orderStatus = domain.orderStatus
             )

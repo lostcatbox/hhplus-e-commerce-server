@@ -8,14 +8,12 @@ import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 import kotlin.test.Test
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
 class OrderFacadeIntegrationTest {
     @Autowired
@@ -44,8 +42,8 @@ class OrderFacadeIntegrationTest {
             price = 10000L,
             stock = 100L
         )
-        productRepository.save(product)
-        testProductId = product.id
+        val savedProduct = productRepository.save(product)
+        testProductId = savedProduct.id
 
         val point = Point(
             userId = 1L,
@@ -66,18 +64,27 @@ class OrderFacadeIntegrationTest {
                     quantity = 2L
                 )
             ),
-
             orderDateTime = LocalDateTime.now(),
             orderStatus = OrderStatus.주문_요청됨
         )
 
-        val savedOrder = orderRepository.save(order)
+        // OrderCriteria 생성
+        val orderCriteria = OrderCriteria(
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines.map {
+                OrderLineCriteria(
+                    productId = it.productId,
+                    quantity = it.quantity
+                )
+            }
+        )
 
         // when
-        orderFacade.processOrder(savedOrder)
+        orderFacade.processOrder(orderCriteria)
 
         // then
-        val processedOrder = orderRepository.findById(savedOrder.id)
+        val processedOrder = orderRepository.findById(1L)
         assertNotNull(processedOrder)
         assertEquals(OrderStatus.결제_완료, processedOrder?.orderStatus)
 
@@ -103,10 +110,21 @@ class OrderFacadeIntegrationTest {
             orderDateTime = LocalDateTime.now(),
             orderStatus = OrderStatus.주문_요청됨
         )
-        val savedOrder = orderRepository.save(order)
+
+        // OrderCriteria 생성
+        val orderCriteria = OrderCriteria(
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines.map {
+                OrderLineCriteria(
+                    productId = it.productId,
+                    quantity = it.quantity
+                )
+            }
+        )
 
         // when
-        org.junit.jupiter.api.assertThrows<IllegalArgumentException> { orderFacade.processOrder(savedOrder) }
+        org.junit.jupiter.api.assertThrows<IllegalArgumentException> { orderFacade.processOrder(orderCriteria) }
 
         // 재고는 그대로인지 확인
         val product = productRepository.findById(testProductId)
@@ -128,23 +146,35 @@ class OrderFacadeIntegrationTest {
             orderDateTime = LocalDateTime.now(),
             orderStatus = OrderStatus.주문_요청됨
         )
-        val savedOrder = orderRepository.save(order)
+
+        // OrderCriteria 생성
+        val orderCriteria = OrderCriteria(
+            userId = order.userId,
+            issuedCouponId = order.issuedCouponId,
+            orderLines = order.orderLines.map {
+                OrderLineCriteria(
+                    productId = it.productId,
+                    quantity = it.quantity
+                )
+            }
+        )
 
         // when
-        orderFacade.processOrder(savedOrder)
+        orderFacade.processOrder(orderCriteria)
 
         // then
-        val processedOrder = orderRepository.findById(savedOrder.id)
+        val processedOrder = orderRepository.findById(2L)
         assertNotNull(processedOrder)
 
         // OrderHistory 테이블에 상태 변경 이력이 제대로 저장되었는지 확인
-        val orderHistories = orderHistoryRepository.findByOrderId(savedOrder.id)
+        val orderHistories = orderHistoryRepository.findByOrderId(2L)
         assertTrue(orderHistories.isNotEmpty())
 
         // 상태 변경 순서 확인
         val statusSequence = orderHistories.map { it.orderStatus }
         assertEquals(
             listOf(
+                OrderStatus.주문_요청됨,
                 OrderStatus.상품_준비중,
                 OrderStatus.결제_대기중,
                 OrderStatus.결제_완료
@@ -176,7 +206,18 @@ class OrderFacadeIntegrationTest {
 //        runBlocking {
 //            val jobs = savedOrders.map { order ->
 //                async {
-//                    orderFacade.processOrder(order)
+//                    // OrderCriteria 생성
+//                    val orderCriteria = OrderCriteria(
+//                        userId = order.userId,
+//                        issuedCouponId = order.issuedCouponId,
+//                        orderLines = order.orderLines.map { 
+//                            OrderLineCriteria(
+//                                productId = it.productId,
+//                                quantity = it.quantity
+//                            )
+//                        }
+//                    )
+//                    orderFacade.processOrder(orderCriteria)
 //                }
 //            }
 //            jobs.awaitAll()

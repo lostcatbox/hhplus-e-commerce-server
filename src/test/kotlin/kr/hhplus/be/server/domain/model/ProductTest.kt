@@ -85,13 +85,16 @@ class ProductTest {
             )
 
             // when
-            product.sale(10L)
+            val saledProduct = product.sale(10L)
 
             // then
-            product.stock shouldBe 90L
-            product.id shouldBe product.id
-            product.name shouldBe product.name
-            product.price shouldBe product.price
+            saledProduct.stock shouldBe 90L
+            saledProduct.id shouldBe product.id
+            saledProduct.name shouldBe product.name
+            saledProduct.price shouldBe product.price
+            
+            // 원본 product는 변경되지 않음
+            product.stock shouldBe 100L
         }
     }
 
@@ -119,6 +122,9 @@ class ProductTest {
             result.orderCount shouldBe 110L
             result.popularProductId.productId shouldBe popularProduct.popularProductId.productId
             result.popularProductId.dateTime shouldBe popularProduct.popularProductId.dateTime
+            
+            // 원본 popularProduct는 변경되지 않음
+            popularProduct.orderCount shouldBe 100L
         }
 
         @Test
@@ -139,6 +145,9 @@ class ProductTest {
             result.orderCount shouldBe 90L
             result.popularProductId.productId shouldBe popularProduct.popularProductId.productId
             result.popularProductId.dateTime shouldBe popularProduct.popularProductId.dateTime
+            
+            // 원본 popularProduct는 변경되지 않음
+            popularProduct.orderCount shouldBe 100L
         }
 
         @Test

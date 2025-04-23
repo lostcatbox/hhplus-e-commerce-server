@@ -5,7 +5,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
-import kr.hhplus.be.server.domain.order.OrderLine
+import kr.hhplus.be.server.domain.order.OrderLineCriteria
 import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductRepository
 import kr.hhplus.be.server.domain.product.ProductService
@@ -49,7 +49,6 @@ class ProductServiceTest {
 
         every { productRepository.findAll() } returns products
         every { productRepository.findById(1L) } returns product
-        every { productRepository.findById(any()) } returns null
         every { productRepository.save(any()) } returnsArgument 0
     }
 
@@ -66,7 +65,6 @@ class ProductServiceTest {
 
     @Test
     fun `아이디로 상품 조회 - 존재하는 경우`() {
-        every { productRepository.findById(1L) } returns product
         // When
         val result = productService.findById(1L)
 
@@ -80,10 +78,13 @@ class ProductServiceTest {
 
     @Test
     fun `아이디로 상품 조회 - 존재하지 않는 경우`() {
+        every { productRepository.findById(999L) } returns null
+
         // When & Then
         assertThrows<ProductNotFoundException> {
             productService.findById(999L)
         }
+
         verify(exactly = 1) { productRepository.findById(999L) }
     }
 
@@ -91,26 +92,27 @@ class ProductServiceTest {
     fun `주문 상품 판매 처리 - 재고 차감`() {
         // Given
         val orderLines = listOf(
-            OrderLine(
+            OrderLineCriteria(
                 productId = 1L,
-                productPrice = 1000L,
                 quantity = 2L
             )
         )
+
         val updatedProduct = Product(
             id = product.id,
             name = product.name,
             price = product.price,
             stock = 8L
         )
+
         every { productRepository.findById(1L) } returns product
+        every { productRepository.save(any()) } returns updatedProduct
 
         // When
         productService.saleOrderProducts(orderLines)
 
         // Then
         verify(exactly = 1) { productRepository.findById(1L) }
-//        verify(exactly = 1) { product.sale(2L) }
-//        verify(exactly = 1) { productRepository.save(updatedProduct) }
+        verify(exactly = 1) { productRepository.save(any()) }
     }
 } 

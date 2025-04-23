@@ -8,13 +8,8 @@ import kr.hhplus.be.server.domain.coupon.PercentageCoupon
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 class CouponsTest {
-
-    private val now = LocalDateTime.now()
-    private val validStartDate = now.minusDays(1)
-    private val validEndDate = now.plusDays(1)
 
     @Nested
     @DisplayName("AmountCoupon 테스트")
@@ -26,8 +21,6 @@ class CouponsTest {
                 id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = true,
                 amount = 10000L
             )
@@ -40,8 +33,6 @@ class CouponsTest {
                     id = 1L,
                     name = "잘못된 쿠폰",
                     stock = 100L,
-                    startDate = validStartDate,
-                    endDate = validEndDate,
                     active = true,
                     amount = 0L
                 )
@@ -55,8 +46,6 @@ class CouponsTest {
                 id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = true,
                 amount = 10000L
             )
@@ -75,8 +64,6 @@ class CouponsTest {
                 id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = true,
                 amount = 10000L
             )
@@ -98,8 +85,6 @@ class CouponsTest {
                 id = 1L,
                 name = "10% 할인 쿠폰",
                 stock = 100L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = true,
                 percent = 10.0
             )
@@ -112,8 +97,6 @@ class CouponsTest {
                     id = 1L,
                     name = "잘못된 쿠폰",
                     stock = 100L,
-                    startDate = validStartDate,
-                    endDate = validEndDate,
                     active = true,
                     percent = 0.0
                 )
@@ -127,8 +110,6 @@ class CouponsTest {
                     id = 1L,
                     name = "잘못된 쿠폰",
                     stock = 100L,
-                    startDate = validStartDate,
-                    endDate = validEndDate,
                     active = true,
                     percent = 101.0
                 )
@@ -142,8 +123,6 @@ class CouponsTest {
                 id = 1L,
                 name = "10% 할인 쿠폰",
                 stock = 100L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = true,
                 percent = 10.0
             )
@@ -166,8 +145,6 @@ class CouponsTest {
                 id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = true,
                 amount = 10000L
             )
@@ -189,8 +166,6 @@ class CouponsTest {
                 id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 0L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = true,
                 amount = 10000L
             )
@@ -208,8 +183,6 @@ class CouponsTest {
                 id = 1L,
                 name = "1만원 할인 쿠폰",
                 stock = 100L,
-                startDate = validStartDate,
-                endDate = validEndDate,
                 active = false,
                 amount = 10000L
             )

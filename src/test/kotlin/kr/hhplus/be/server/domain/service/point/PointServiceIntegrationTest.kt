@@ -68,44 +68,56 @@ class PointServiceIntegrationTest {
     }
 
     @Test
-    fun `usePoint - 포인트 부족시 예외 발생`() {
+    fun `usePoint - 잔액 부족으로 실패`() {
         // given
         val userId = 1L
-        val point = Point(userId, 1000L)
+        val point = Point(userId, 2000L)
         pointRepository.save(point)
 
         // when & then
         assertThrows<IllegalArgumentException> {
-            pointService.usePoint(userId, 2000L)
+            pointService.usePoint(userId, 3000L)
         }
 
-        // 포인트 변경되지 않았는지 확인
-        val updatedPoint = pointRepository.findByUserId(userId)
-        assertEquals(1000L, updatedPoint!!.amount)
+        // 포인트가 차감되지 않았는지 확인
+        val unchangedPoint = pointRepository.findByUserId(userId)
+        assertEquals(2000L, unchangedPoint!!.amount)
     }
 
     @Test
     fun `chargePoint - 포인트 충전 성공`() {
         // given
         val userId = 1L
-        val point = Point(userId, 1000L)
+        val point = Point(userId, 5000L)
         pointRepository.save(point)
 
         // when
-        pointService.chargePoint(userId, 5000L)
+        pointService.chargePoint(userId, 3000L)
 
         // then
         val updatedPoint = pointRepository.findByUserId(userId)
         assertNotNull(updatedPoint)
-        assertEquals(6000L, updatedPoint!!.amount)
+        assertEquals(8000L, updatedPoint!!.amount)
     }
 
     @Test
-    fun `chargePoint - 음수 충전 시도시 예외 발생`() {
+    fun `chargePoint - 새 사용자에게 포인트 충전`() {
+        // given
+        val newUserId = 999L
+
+        // when
+        pointService.chargePoint(newUserId, 5000L)
+
+        // then
+        val newUserPoint = pointRepository.findByUserId(newUserId)
+        assertNotNull(newUserPoint)
+        assertEquals(5000L, newUserPoint!!.amount)
+    }
+
+    @Test
+    fun `chargePoint - 음수 충전액으로 실패`() {
         // given
         val userId = 1L
-        val point = Point(userId, 1000L)
-        pointRepository.save(point)
 
         // when & then
         assertThrows<IllegalArgumentException> {
@@ -114,15 +126,13 @@ class PointServiceIntegrationTest {
     }
 
     @Test
-    fun `chargePoint - 최대 충전 금액 초과시 예외 발생`() {
+    fun `chargePoint - 최대 충전액 초과로 실패`() {
         // given
         val userId = 1L
-        val point = Point(userId, 1000L)
-        pointRepository.save(point)
 
         // when & then
         assertThrows<IllegalArgumentException> {
-            pointService.chargePoint(userId, 1500000L) // 100만원 초과
+            pointService.chargePoint(userId, 2000000L) // 100만원 초과
         }
     }
 } 

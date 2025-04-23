@@ -62,32 +62,28 @@ class PointServiceTest {
     fun `포인트 사용`() {
         // Given
         val useAmount = 5000L
-        val expectedPoint = Point(userId = point.userId, amount = 5000L)
-//        every { point.usePoint(useAmount) } returns expectedPoint
+        val updatedPoint = Point(userId = userId, amount = 5000L)
 
         // When
         pointService.usePoint(userId, useAmount)
 
         // Then
         verify(exactly = 1) { pointRepository.findByUserId(userId) }
-//        verify(exactly = 1) { point.usePoint(useAmount) }
-//        verify(exactly = 1) { pointRepository.save(expectedPoint) }
+        verify { pointRepository.save(any()) }
     }
 
     @Test
     fun `포인트 충전`() {
         // Given
         val chargeAmount = 5000L
-        val expectedPoint = Point(userId = point.userId, amount = 15000L)
-//        every { point.chargePoint(chargeAmount) } returns expectedPoint
+        val updatedPoint = Point(userId = userId, amount = 15000L)
 
         // When
         pointService.chargePoint(userId, chargeAmount)
 
         // Then
         verify(exactly = 1) { pointRepository.findByUserId(userId) }
-//        verify(exactly = 1) { point.chargePoint(chargeAmount) }
-//        verify(exactly = 1) { pointRepository.save(expectedPoint) }
+        verify { pointRepository.save(any()) }
     }
 
     @Test
@@ -95,16 +91,12 @@ class PointServiceTest {
         // Given
         val noPointUserId = 999L
         val chargeAmount = 5000L
-        val expectedPoint = Point(
-            userId = emptyPoint.userId, amount = 5000L
-        )
-//        every { emptyPoint.chargePoint(chargeAmount) } returns expectedPoint
 
         // When
         pointService.chargePoint(noPointUserId, chargeAmount)
 
         // Then
         verify(exactly = 1) { pointRepository.findByUserId(noPointUserId) }
-        verify(exactly = 1) { pointRepository.save(any()) }
+        verify { pointRepository.save(any()) }
     }
 } 

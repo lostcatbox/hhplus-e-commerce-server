@@ -89,8 +89,6 @@ class PaymentServiceIntegrationTest {
             name = "5000원 할인 쿠폰",
             stock = 100L,
             amount = 5000L,
-            startDate = LocalDateTime.now().minusDays(1),
-            endDate = LocalDateTime.now().plusDays(7),
             active = true
         )
 
@@ -117,8 +115,6 @@ class PaymentServiceIntegrationTest {
             name = "20% 할인 쿠폰",
             stock = 100L,
             percent = 20.0,
-            startDate = LocalDateTime.now().minusDays(1),
-            endDate = LocalDateTime.now().plusDays(7),
             active = true
         )
 

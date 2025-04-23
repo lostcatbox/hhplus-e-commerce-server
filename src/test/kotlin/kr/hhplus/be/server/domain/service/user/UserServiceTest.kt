@@ -70,30 +70,22 @@ class UserServiceTest {
 
     @Test
     fun `활성 사용자 확인 - 활성 상태인 경우`() {
-        // Given
-//        every { user.isActive() } returns true
-
         // When
         val result = userService.checkActiveUser(userId)
 
         // Then
         assertTrue(result)
         verify(exactly = 1) { userRepository.findById(userId) }
-//        verify(exactly = 1) { user.isActive() }
     }
 
     @Test
     fun `활성 사용자 확인 - 비활성 상태인 경우`() {
-        // Given
-//        every { inactiveUser.isActive() } returns false
-
         // When
         val result = userService.checkActiveUser(2L)
 
         // Then
         assertFalse(result)
         verify(exactly = 1) { userRepository.findById(2L) }
-//        verify(exactly = 1) { inactiveUser.isActive() }
     }
 
     @Test

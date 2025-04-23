@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDateTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -35,34 +34,53 @@ class CouponServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val now = LocalDateTime.now()
-
+        // Percentage 쿠폰 목
         coupon = mockk<PercentageCoupon>()
         every { coupon.id } returns couponId
         every { coupon.name } returns "테스트 쿠폰"
-        every { coupon.startDate } returns now.minusDays(1)
-        every { coupon.endDate } returns now.plusDays(1)
+        every { coupon.stock } returns 10L
+        every { coupon.active } returns true
+        every { coupon.percent } returns 10.0
 
+        // Amount 쿠폰 목
         amountCoupon = mockk<AmountCoupon>()
         every { amountCoupon.id } returns 2L
         every { amountCoupon.name } returns "테스트 쿠폰 2"
+        every { amountCoupon.stock } returns 10L
+        every { amountCoupon.active } returns true
+        every { amountCoupon.amount } returns 5000L
 
+        // 발급된 쿠폰 목
         issuedCoupon = mockk<IssuedCoupon>()
+        every { issuedCoupon.id } returns 1L
         every { issuedCoupon.couponId } returns couponId
         every { issuedCoupon.userId } returns userId
+        every { issuedCoupon.isUsed } returns false
 
+        // 업데이트된 발급 쿠폰 목
         updatedIssuedCoupon = mockk<IssuedCoupon>()
+        every { updatedIssuedCoupon.id } returns 1L
+        every { updatedIssuedCoupon.couponId } returns couponId
+        every { updatedIssuedCoupon.userId } returns userId
+        every { updatedIssuedCoupon.isUsed } returns true
 
         userCoupons = listOf(
             coupon,
             amountCoupon
         )
 
+        // 쿠폰 발급 관련 모킹
+        val issueCouponAndIssuedCoupon = mockk<IssueCouponAndIssuedCoupon>()
+        every { coupon.issueTo(any()) } returns issueCouponAndIssuedCoupon
+        every { coupon.isAvailable() } returns true
+
+        // 레포지토리 응답 모킹
         every { couponRepository.findAllByUserId(userId) } returns userCoupons
         every { couponRepository.findById(couponId) } returns coupon
         every { couponRepository.findByIdWithPessimisticLock(couponId) } returns coupon
         every { couponRepository.findIssuedCouponById(any()) } returns issuedCoupon
         every { couponRepository.save(any<IssueCouponAndIssuedCoupon>()) } returns Unit
+        every { couponRepository.save(any<IssuedCoupon>()) } returns updatedIssuedCoupon
         every { issuedCoupon.useCoupon() } returns updatedIssuedCoupon
     }
 
@@ -81,7 +99,6 @@ class CouponServiceTest {
     @Test
     fun `쿠폰 발급`() {
         // Given
-        val remainingCoupon = mockk<PercentageCoupon>()
         val issueCouponAndIssuedCoupon = mockk<IssueCouponAndIssuedCoupon>()
         every { coupon.issueTo(userId) } returns issueCouponAndIssuedCoupon
 
@@ -105,10 +122,17 @@ class CouponServiceTest {
         val mockCoupons = List(threadCount) { mockk<PercentageCoupon>() }
         val mockResults = List(threadCount) { mockk<IssueCouponAndIssuedCoupon>() }
 
-        // 비관적 락 호출 시 쿠폰 반환 설정 (any()를 사용해 정확한 ID 매칭 대신 any ID 허용)
+        // 비관적 락 호출 시 쿠폰 반환 설정
         every { couponRepository.findByIdWithPessimisticLock(any()) } returnsMany mockCoupons
 
-        // 쿠폰 발급 및 저장 설정 (any()를 사용해 정확한 사용자 ID 매칭 대신 any ID 허용)
+        // 각 모의 쿠폰에 공통 설정
+        mockCoupons.forEach { mockCoupon ->
+            every { mockCoupon.id } returns couponId
+            every { mockCoupon.active } returns true
+            every { mockCoupon.isAvailable() } returns true
+        }
+
+        // 쿠폰 발급 및 저장 설정
         mockCoupons.forEachIndexed { idx, mockCoupon ->
             every { mockCoupon.issueTo(any()) } returns mockResults[idx]
             every { couponRepository.save(mockResults[idx]) } returns Unit
@@ -157,17 +181,18 @@ class CouponServiceTest {
         verify(exactly = 1) { couponRepository.findById(couponId) }
     }
 
-//    @Test
-//    fun `쿠폰 사용 처리 - 발급된 쿠폰이 있는 경우`() {
-//        // When
-//        val result = couponService.useIssuedCoupon(1L)
-//
-//        // Then
-//        assertEquals(coupon, result)
-//        verify(exactly = 1) { couponRepository.findIssuedCouponById(1L) }
-//        verify(exactly = 1) { issuedCoupon.useCoupon() }
-//        verify(exactly = 1) { couponRepository.findById(couponId) }
-//    }
+    @Test
+    fun `쿠폰 사용 처리 - 발급된 쿠폰이 있는 경우`() {
+        // When
+        val result = couponService.useIssuedCoupon(1L)
+
+        // Then
+        assertEquals(coupon, result)
+        verify(exactly = 1) { couponRepository.findIssuedCouponById(1L) }
+        verify(exactly = 1) { issuedCoupon.useCoupon() }
+        verify(exactly = 1) { couponRepository.save(any<IssuedCoupon>()) }
+        verify(exactly = 1) { couponRepository.findById(couponId) }
+    }
 
     @Test
     fun `쿠폰 사용 처리 - 발급된 쿠폰이 없는 경우`() {

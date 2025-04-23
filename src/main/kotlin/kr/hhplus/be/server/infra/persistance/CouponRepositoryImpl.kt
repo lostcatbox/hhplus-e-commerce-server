@@ -8,8 +8,10 @@ import kr.hhplus.be.server.infra.persistance.jpa.CouponJpaRepository
 import kr.hhplus.be.server.infra.persistance.jpa.IssuedCouponJpaRepository
 import kr.hhplus.be.server.infra.persistance.model.CouponEntity
 import kr.hhplus.be.server.infra.persistance.model.IssuedCouponEntity
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 
 @Repository
 class CouponRepositoryImpl(
@@ -25,7 +27,8 @@ class CouponRepositoryImpl(
 
     @Transactional
     override fun findById(couponId: Long): Coupon {
-        return couponJpaRepository.findById(couponId).orElseThrow().toDomain()
+        return couponJpaRepository.findById(couponId).getOrNull()?.toDomain()
+            ?: throw EmptyResultDataAccessException("Coupon not found with id: $couponId", 1)
     }
 
     @Transactional
@@ -49,7 +52,7 @@ class CouponRepositoryImpl(
     override fun findAllByUserId(userId: Long): List<Coupon> {
         val issuedCoupons = issuedCouponJpaRepository.findAllByUserId(userId)
         val couponIds = issuedCoupons.map { it.couponId }
-        
+
         return couponJpaRepository.findAllByIdIn(couponIds).map { it.toDomain() }
     }
 
@@ -58,6 +61,7 @@ class CouponRepositoryImpl(
     }
 
     override fun findIssuedCouponById(issuedCouponId: Long): IssuedCoupon {
-        return issuedCouponJpaRepository.findById(issuedCouponId).orElseThrow().toDomain()
+        return issuedCouponJpaRepository.findById(issuedCouponId).getOrNull()?.toDomain()
+            ?: throw EmptyResultDataAccessException("IssuedCoupon not found with id: $issuedCouponId", 1)
     }
 }

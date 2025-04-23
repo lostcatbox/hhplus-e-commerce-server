@@ -12,7 +12,7 @@ enum class OrderStatus {
 }
 
 // 순수 도메인 모델로 변경
-class Order(
+data class Order(
     val id: Long = 0L,
     val userId: Long,
     val issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
@@ -23,52 +23,32 @@ class Order(
     val totalPrice: Long = orderLines.sumOf { it.totalPrice }
 
     fun readyProduct(): Order {
-        return Order(
-            id = this.id,
-            userId = this.userId,
-            issuedCouponId = this.issuedCouponId,
-            orderLines = this.orderLines,
-            orderDateTime = this.orderDateTime,
+        return this.copy(
             orderStatus = OrderStatus.상품_준비중
         )
     }
 
     fun readyPay(): Order {
-        return Order(
-            id = this.id,
-            userId = this.userId,
-            issuedCouponId = this.issuedCouponId,
-            orderLines = this.orderLines,
-            orderDateTime = this.orderDateTime,
+        return this.copy(
             orderStatus = OrderStatus.결제_대기중
         )
     }
 
     fun finishPay(): Order {
-        return Order(
-            id = this.id,
-            userId = this.userId,
-            issuedCouponId = this.issuedCouponId,
-            orderLines = this.orderLines,
-            orderDateTime = this.orderDateTime,
+        return this.copy(
             orderStatus = OrderStatus.결제_완료
         )
     }
 
     fun failOrder(): Order {
-        return Order(
-            id = this.id,
-            userId = this.userId,
-            issuedCouponId = this.issuedCouponId,
-            orderLines = this.orderLines,
-            orderDateTime = this.orderDateTime,
+        return this.copy(
             orderStatus = OrderStatus.주문_실패
         )
     }
 }
 
 // 순수 도메인 모델로 변경
-class OrderLine(
+data class OrderLine(
     val productId: Long,
     val productPrice: Long,
     val quantity: Long,
@@ -77,7 +57,7 @@ class OrderLine(
 }
 
 // 순수 도메인 모델로 변경
-class OrderHistory(
+data class OrderHistory(
     val id: Long = 0L,
     val orderId: Long,
     val userId: Long,

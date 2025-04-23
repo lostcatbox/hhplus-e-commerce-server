@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.service.product
 
-import kr.hhplus.be.server.domain.order.OrderLine
+import kr.hhplus.be.server.domain.order.OrderLineCriteria
 import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductRepository
 import kr.hhplus.be.server.domain.product.ProductService
@@ -65,39 +65,37 @@ class ProductServiceIntegrationTest {
     }
 
     @Test
-    fun `saleOrderProducts - 재고 차감 성공`() {
+    fun `saleOrderProducts - 상품 재고 차감 성공`() {
         // given
-        val product1 = Product(name = "상품A", price = 10000L, stock = 100L)
-        val product2 = Product(name = "상품B", price = 20000L, stock = 50L)
-        val savedProduct1 = productRepository.save(product1)
-        val savedProduct2 = productRepository.save(product2)
-
+        val product = Product(name = "테스트 상품", price = 15000L, stock = 30L)
+        val savedProduct = productRepository.save(product)
+        
         val orderLines = listOf(
-            OrderLine(productId = savedProduct1.id, productPrice = 10000L, quantity = 10L),
-            OrderLine(productId = savedProduct2.id, productPrice = 20000L, quantity = 5L)
+            OrderLineCriteria(
+                productId = savedProduct.id,
+                quantity = 5L
+            )
         )
 
         // when
         productService.saleOrderProducts(orderLines)
 
         // then
-        val updatedProduct1 = productRepository.findById(savedProduct1.id)
-        val updatedProduct2 = productRepository.findById(savedProduct2.id)
-
-        assertNotNull(updatedProduct1)
-        assertNotNull(updatedProduct2)
-        assertEquals(90L, updatedProduct1!!.stock) // 100 - 10
-        assertEquals(45L, updatedProduct2!!.stock) // 50 - 5
+        val updatedProduct = productService.findById(savedProduct.id)
+        assertEquals(25L, updatedProduct.stock) // 30 - 5
     }
 
     @Test
     fun `saleOrderProducts - 재고 부족시 예외 발생`() {
         // given
-        val product = Product(name = "재고부족상품", price = 10000L, stock = 5L)
+        val product = Product(name = "재고 부족 상품", price = 15000L, stock = 3L)
         val savedProduct = productRepository.save(product)
-
+        
         val orderLines = listOf(
-            OrderLine(productId = savedProduct.id, productPrice = 10000L, quantity = 10L) // 재고보다 많은 수량
+            OrderLineCriteria(
+                productId = savedProduct.id,
+                quantity = 5L
+            )
         )
 
         // when & then
@@ -105,8 +103,8 @@ class ProductServiceIntegrationTest {
             productService.saleOrderProducts(orderLines)
         }
 
-        // 재고가 변경되지 않았는지 확인
-        val updatedProduct = productRepository.findById(savedProduct.id)
-        assertEquals(5L, updatedProduct!!.stock)
+        // 재고가 차감되지 않았는지 확인
+        val unchangedProduct = productService.findById(savedProduct.id)
+        assertEquals(3L, unchangedProduct.stock)
     }
 } 

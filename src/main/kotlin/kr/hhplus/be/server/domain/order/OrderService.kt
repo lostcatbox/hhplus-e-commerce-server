@@ -21,17 +21,16 @@ class OrderService(
                 quantity = lineCriteria.quantity
             )
         }
-        
+
         // 주문 생성
         val order = Order(
-            id = 0L,
             userId = orderCriteria.userId,
             issuedCouponId = orderCriteria.issuedCouponId,
             orderLines = orderLinesWithPrice,
             orderDateTime = orderCriteria.orderDateTime,
             orderStatus = OrderStatus.주문_요청됨
         )
-        
+
         // 주문 저장 및 반환
         val savedOrder = orderRepository.save(order)
         saveOrderHistory(savedOrder)

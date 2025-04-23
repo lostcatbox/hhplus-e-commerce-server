@@ -14,7 +14,6 @@ class PaymentService(
 ) {
     @Transactional
     fun pay(order: Order, coupon: Coupon?) {
-        val point = pointService.getPoint(order.userId)
         var finalPayAmount = order.totalPrice
 
         // 쿠폰 존재 시 사용

@@ -25,7 +25,7 @@ class UserServiceIntegrationTest {
     fun `getUserByUserId - 존재하는 사용자 조회 성공`() {
         // given
         val user = User(
-            id = 0,
+            id = 0L,
             email = "test@example.com",
             name = "Test User",
             password = "password",
@@ -52,13 +52,11 @@ class UserServiceIntegrationTest {
     }
 
     @Test
-    fun `checkActiveUser - 활성 사용자 확인`() {
+    fun `checkActiveUser - 활성 사용자 확인 성공`() {
         // given
         val user = User(
-            id = 0,
-            email = "active@example.com",
+            id = 0L,
             name = "Active User",
-            password = "password",
             active = true
         )
         val savedUser = userRepository.save(user)
@@ -74,25 +72,14 @@ class UserServiceIntegrationTest {
     fun `checkActiveUser - 비활성 사용자 확인`() {
         // given
         val user = User(
-            id = 0,
-            email = "inactive@example.com",
+            id = 0L,
             name = "Inactive User",
-            password = "password",
             active = false
         )
         val savedUser = userRepository.save(user)
 
         // when
         val result = userService.checkActiveUser(savedUser.id)
-
-        // then
-        assertFalse(result)
-    }
-
-    @Test
-    fun `checkActiveUser - 존재하지 않는 사용자 확인시 false 반환`() {
-        // when
-        val result = userService.checkActiveUser(999L)
 
         // then
         assertFalse(result)

@@ -53,17 +53,29 @@ class OrdersTest {
         )
 
         // when & then
-        order.readyProduct()
-        assertEquals(OrderStatus.상품_준비중, order.orderStatus)
+        // 상품 준비중 상태로 변경
+        val readyProductOrder = order.readyProduct()
+        assertEquals(OrderStatus.상품_준비중, readyProductOrder.orderStatus)
+        // 원본 order는 변경되지 않음
+        assertEquals(OrderStatus.주문_요청됨, order.orderStatus)
 
-        order.readyPay()
-        assertEquals(OrderStatus.결제_대기중, order.orderStatus)
+        // 결제 대기중 상태로 변경
+        val readyPayOrder = readyProductOrder.readyPay()
+        assertEquals(OrderStatus.결제_대기중, readyPayOrder.orderStatus)
+        // 이전 order는 변경되지 않음
+        assertEquals(OrderStatus.상품_준비중, readyProductOrder.orderStatus)
 
-        order.finishPay()
-        assertEquals(OrderStatus.결제_완료, order.orderStatus)
+        // 결제 완료 상태로 변경
+        val finishPayOrder = readyPayOrder.finishPay()
+        assertEquals(OrderStatus.결제_완료, finishPayOrder.orderStatus)
+        // 이전 order는 변경되지 않음
+        assertEquals(OrderStatus.결제_대기중, readyPayOrder.orderStatus)
 
-        order.failOrder()
-        assertEquals(OrderStatus.주문_실패, order.orderStatus)
+        // 주문 실패 상태로 변경
+        val failOrder = finishPayOrder.failOrder()
+        assertEquals(OrderStatus.주문_실패, failOrder.orderStatus)
+        // 이전 order는 변경되지 않음
+        assertEquals(OrderStatus.결제_완료, finishPayOrder.orderStatus)
     }
 
     @Test
