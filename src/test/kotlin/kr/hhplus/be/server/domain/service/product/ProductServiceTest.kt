@@ -78,8 +78,6 @@ class ProductServiceTest {
 
     @Test
     fun `아이디로 상품 조회 - 존재하지 않는 경우`() {
-        every { productRepository.findById(999L) } returns null
-
         // When & Then
         assertThrows<ProductNotFoundException> {
             productService.findById(999L)

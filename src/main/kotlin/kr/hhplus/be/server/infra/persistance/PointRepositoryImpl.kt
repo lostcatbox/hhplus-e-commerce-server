@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository
 class PointRepositoryImpl(
     private val pointJpaRepository: PointJpaRepository
 ) : PointRepository {
-    override fun save(point: Point) {
+    override fun save(point: Point): Point {
         val entity = PointEntity.from(point)
-        pointJpaRepository.save(entity)
+        return pointJpaRepository.save(entity).toDomain()
     }
 
     override fun findByUserIdWithPessimisticLock(userId: Long): Point? {

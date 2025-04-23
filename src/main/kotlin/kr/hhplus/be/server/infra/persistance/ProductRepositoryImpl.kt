@@ -2,25 +2,34 @@ package kr.hhplus.be.server.infra.persistance
 
 import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductRepository
+import kr.hhplus.be.server.exceptions.ProductNotFoundException
 import kr.hhplus.be.server.infra.persistance.jpa.ProductJpaRepository
 import kr.hhplus.be.server.infra.persistance.model.ProductEntity
 import org.springframework.stereotype.Repository
 
 @Repository
 class ProductRepositoryImpl(
-    private val productJPARepository: ProductJpaRepository
+    private val productJpaRepository: ProductJpaRepository
 ) : ProductRepository {
-    override fun findById(productId: Long): Product? {
-        return productJPARepository.findById(productId).orElse(null)?.toDomain()
+    override fun findAll(): List<Product> {
+        return productJpaRepository.findAll().map { it.toDomain() }
     }
 
-    override fun findAll(): List<Product> {
-        return productJPARepository.findAll().map { it.toDomain() }
+    override fun findById(productId: Long): Product {
+        return productJpaRepository.findById(productId)
+            .map { it.toDomain() }
+            .orElseThrow { ProductNotFoundException(productId) }
     }
 
     override fun save(product: Product): Product {
         val entity = ProductEntity.from(product)
-        val savedEntity = productJPARepository.save(entity)
+        val savedEntity = productJpaRepository.save(entity)
         return savedEntity.toDomain()
+    }
+    
+    override fun findByIdWithPessimisticLock(productId: Long): Product {
+        return productJpaRepository.findByIdWithPessimisticLock(productId)
+            ?.toDomain()
+            ?: throw ProductNotFoundException(productId)
     }
 }

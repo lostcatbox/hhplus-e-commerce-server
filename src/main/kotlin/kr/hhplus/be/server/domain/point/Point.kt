@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.domain.point
 
 // 순수 도메인 모델로 변경
-class Point(
+data class Point(
     val userId: Long,
     val amount: Long
 ) {

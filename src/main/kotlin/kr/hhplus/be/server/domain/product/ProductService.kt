@@ -21,7 +21,8 @@ class ProductService(
     @Transactional
     fun saleOrderProducts(orderLines: List<OrderLineCriteria>) {
         for (orderLine in orderLines) {
-            val product = findById(orderLine.productId)
+            // 비관적 락을 사용하여 상품 조회
+            val product = productRepository.findByIdWithPessimisticLock(orderLine.productId)
             // 재고 차감
             val updatedProduct = product.sale(orderLine.quantity)
             productRepository.save(updatedProduct)
