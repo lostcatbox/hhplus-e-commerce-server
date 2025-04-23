@@ -14,13 +14,13 @@ class PointService(
 
     fun usePoint(userId: Long, useAmount: Long) {
         val point = pointRepository.findByUserId(userId) ?: Point.EMPTY(userId)
-        point.usePoint(useAmount)
-        pointRepository.save(point)
+        val updatedPoint = point.usePoint(useAmount)
+        pointRepository.save(updatedPoint)
     }
 
     fun chargePoint(userId: Long, chargeAmount: Long) {
         val point = pointRepository.findByUserId(userId) ?: Point.EMPTY(userId)
-        point.chargePoint(chargeAmount)
-        pointRepository.save(point)
+        val updatedPoint = point.chargePoint(chargeAmount)
+        pointRepository.save(updatedPoint)
     }
 }

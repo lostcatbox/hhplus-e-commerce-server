@@ -10,6 +10,6 @@ class ProductStatisticRepositoryImpl(
     private val popularProductJpaRepository: PopularProductJpaRepository
 ) : ProductStatisticRepository {
     override fun findPopularProducts(): List<PopularProduct> {
-        return popularProductJpaRepository.findPopularProducts()
+        return popularProductJpaRepository.findPopularProducts().map { it.toDomain() }
     }
 } 

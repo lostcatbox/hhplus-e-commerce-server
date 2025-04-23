@@ -23,7 +23,8 @@ class PaymentService(
         }
 
         // 포인트 결제 처리
-        point.usePoint(finalPayAmount)
+        pointService.usePoint(order.userId, finalPayAmount)
+        val updatedPoint = pointService.getPoint(order.userId)
 
         // 결제 정보 생성
         val payment = Payment(
@@ -31,7 +32,7 @@ class PaymentService(
             userId = order.userId,
             payAmount = finalPayAmount,
             status = PaymentStatus.COMPLETED,
-            remainPointAmount = point.amount,
+            remainPointAmount = updatedPoint.amount,
             couponId = order.issuedCouponId
         )
         paymentRepository.save(payment)

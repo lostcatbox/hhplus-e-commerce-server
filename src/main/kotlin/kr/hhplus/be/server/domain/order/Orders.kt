@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.domain.order
 
-import jakarta.persistence.*
 import java.time.LocalDateTime
 
 
@@ -12,62 +11,78 @@ enum class OrderStatus {
     주문_실패
 }
 
-@Entity(name = "orders")
+// 순수 도메인 모델로 변경
 class Order(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0L,
-    var userId: Long,
-    var issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
-    @ElementCollection
-    @CollectionTable(
-        name = "order_lines",
-        joinColumns = [JoinColumn(name = "order_id")]
-    )
-    var orderLines: MutableList<OrderLine>,
-    var orderDateTime: LocalDateTime,
-    @Enumerated(EnumType.STRING)
-    var orderStatus: OrderStatus = OrderStatus.주문_요청됨  // 주문요청됨, 상품준비중, 결제 대기중, 결제 완료, 주문실패
+    val id: Long = 0L,
+    val userId: Long,
+    val issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
+    val orderLines: List<OrderLine>,
+    val orderDateTime: LocalDateTime,
+    val orderStatus: OrderStatus = OrderStatus.주문_요청됨  // 주문요청됨, 상품준비중, 결제 대기중, 결제 완료, 주문실패
 ) {
-    var totalPrice: Long = orderLines.sumOf { it.totalPrice }
+    val totalPrice: Long = orderLines.sumOf { it.totalPrice }
 
-    fun readyProduct() {
-
-        orderStatus = OrderStatus.상품_준비중
-
+    fun readyProduct(): Order {
+        return Order(
+            id = this.id,
+            userId = this.userId,
+            issuedCouponId = this.issuedCouponId,
+            orderLines = this.orderLines,
+            orderDateTime = this.orderDateTime,
+            orderStatus = OrderStatus.상품_준비중
+        )
     }
 
-    fun readyPay() {
-        orderStatus = OrderStatus.결제_대기중
+    fun readyPay(): Order {
+        return Order(
+            id = this.id,
+            userId = this.userId,
+            issuedCouponId = this.issuedCouponId,
+            orderLines = this.orderLines,
+            orderDateTime = this.orderDateTime,
+            orderStatus = OrderStatus.결제_대기중
+        )
     }
 
-    fun finishPay() {
-        orderStatus = OrderStatus.결제_완료
+    fun finishPay(): Order {
+        return Order(
+            id = this.id,
+            userId = this.userId,
+            issuedCouponId = this.issuedCouponId,
+            orderLines = this.orderLines,
+            orderDateTime = this.orderDateTime,
+            orderStatus = OrderStatus.결제_완료
+        )
     }
 
-    fun failOrder() {
-        orderStatus = OrderStatus.주문_실패
+    fun failOrder(): Order {
+        return Order(
+            id = this.id,
+            userId = this.userId,
+            issuedCouponId = this.issuedCouponId,
+            orderLines = this.orderLines,
+            orderDateTime = this.orderDateTime,
+            orderStatus = OrderStatus.주문_실패
+        )
     }
 }
 
-@Embeddable
+// 순수 도메인 모델로 변경
 class OrderLine(
-    var productId: Long,
-    var productPrice: Long,
-    var quantity: Long,
+    val productId: Long,
+    val productPrice: Long,
+    val quantity: Long,
 ) {
-    var totalPrice: Long = productPrice * quantity
+    val totalPrice: Long = productPrice * quantity
 }
 
-@Entity(name = "orderHistories")
+// 순수 도메인 모델로 변경
 class OrderHistory(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0L,
-    var orderId: Long,
-    var userId: Long,
-    var issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
-    var orderDateTime: LocalDateTime,
-    var totalPrice: Long,
-    var orderStatus: OrderStatus  // 주문요청됨, 상품준비중, 결제 대기중, 결제 완료, 주문실패
+    val id: Long = 0L,
+    val orderId: Long,
+    val userId: Long,
+    val issuedCouponId: Long? = null, // 주문에 사용될 쿠폰 정보
+    val orderDateTime: LocalDateTime,
+    val totalPrice: Long,
+    val orderStatus: OrderStatus  // 주문요청됨, 상품준비중, 결제 대기중, 결제 완료, 주문실패
 )

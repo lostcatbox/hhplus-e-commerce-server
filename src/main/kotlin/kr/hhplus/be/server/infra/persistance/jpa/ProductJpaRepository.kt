@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.infra.persistance.jpa
 
-import kr.hhplus.be.server.domain.product.Product
+import kr.hhplus.be.server.infra.persistance.model.ProductEntity
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-interface ProductJpaRepository : JpaRepository<Product, Long>
+@Repository
+interface ProductJpaRepository : JpaRepository<ProductEntity, Long>

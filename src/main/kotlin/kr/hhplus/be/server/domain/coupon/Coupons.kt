@@ -1,26 +1,15 @@
 package kr.hhplus.be.server.domain.coupon
 
-import jakarta.persistence.*
 import java.time.LocalDateTime
 
-@Entity(name = "coupons")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "coupon_type")
+// 순수 도메인 모델로 변경
 abstract class Coupon(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open var id: Long = 0L,
-
-    open var name: String,
-    open var stock: Long,
-
-    @Column(name = "start_date")
-    open var startDate: LocalDateTime,
-
-    @Column(name = "end_date")
-    open var endDate: LocalDateTime,
-    @Column(name = "active")
-    open var active: Boolean = false
+    open val id: Long = 0L,
+    open val name: String,
+    open val stock: Long,
+    open val startDate: LocalDateTime,
+    open val endDate: LocalDateTime,
+    open val active: Boolean = false
 ) {
     init {
         require(stock >= 0) { "재고는 0 이상이어야 합니다" }
@@ -53,16 +42,15 @@ abstract class Coupon(
     abstract fun createWithDecreasedStock(): Coupon
 }
 
-@Entity
-@DiscriminatorValue("AMOUNT")
+// 순수 도메인 모델로 변경
 class AmountCoupon(
-    id: Long = 0L,
-    name: String,
-    stock: Long,
-    startDate: LocalDateTime,
-    endDate: LocalDateTime,
-    active: Boolean,
-    var amount: Long
+    override val id: Long = 0L,
+    override val name: String,
+    override val stock: Long,
+    override val startDate: LocalDateTime,
+    override val endDate: LocalDateTime,
+    override val active: Boolean,
+    val amount: Long
 ) : Coupon(
     id, name, stock, startDate, endDate, active
 ) {
@@ -79,21 +67,27 @@ class AmountCoupon(
     }
 
     override fun createWithDecreasedStock(): Coupon {
-        this.stock -= 1
-        return this
+        return AmountCoupon(
+            id = this.id,
+            name = this.name,
+            stock = this.stock - 1,
+            startDate = this.startDate,
+            endDate = this.endDate,
+            active = this.active,
+            amount = this.amount
+        )
     }
 }
 
-@Entity
-@DiscriminatorValue("PERCENTAGE")
+// 순수 도메인 모델로 변경
 class PercentageCoupon(
-    id: Long = 0L,
-    name: String,
-    stock: Long,
-    startDate: LocalDateTime,
-    endDate: LocalDateTime,
-    active: Boolean,
-    var percent: Double
+    override val id: Long = 0L,
+    override val name: String,
+    override val stock: Long,
+    override val startDate: LocalDateTime,
+    override val endDate: LocalDateTime,
+    override val active: Boolean,
+    val percent: Double
 ) : Coupon(
     id, name, stock, startDate, endDate, active
 ) {
@@ -106,25 +100,24 @@ class PercentageCoupon(
     }
 
     override fun createWithDecreasedStock(): Coupon {
-        this.stock -= 1
-        return this
+        return PercentageCoupon(
+            id = this.id,
+            name = this.name,
+            stock = this.stock - 1,
+            startDate = this.startDate,
+            endDate = this.endDate,
+            active = this.active,
+            percent = this.percent
+        )
     }
 }
 
-@Entity(name = "issued_coupons")
+// 순수 도메인 모델로 변경
 class IssuedCoupon(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0L,
-
-    @Column(name = "coupon_id")
-    var couponId: Long,
-
-    @Column(name = "user_id")
-    var userId: Long,
-
-    @Column(name = "is_used")
-    var isUsed: Boolean
+    val id: Long = 0L,
+    val couponId: Long,
+    val userId: Long,
+    val isUsed: Boolean
 ) {
     fun canBeUsed(): Boolean {
         return !isUsed
@@ -132,8 +125,12 @@ class IssuedCoupon(
 
     fun useCoupon(): IssuedCoupon {
         require(!isUsed) { "이미 사용된 쿠폰압니다. IssuedCoupon.couponId: $couponId" }
-        this.isUsed = true
-        return this
+        return IssuedCoupon(
+            id = this.id,
+            couponId = this.couponId,
+            userId = this.userId,
+            isUsed = true
+        )
     }
 }
 

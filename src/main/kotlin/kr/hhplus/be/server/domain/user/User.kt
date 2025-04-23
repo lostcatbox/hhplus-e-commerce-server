@@ -1,18 +1,11 @@
 package kr.hhplus.be.server.domain.user
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-
-@Entity(name = "users")
+// 순수 도메인 모델로 변경
 class User(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
     val name: String,
     val email: String = "",
-    var password: String = "",
+    val password: String = "",
     val active: Boolean
 ) {
     fun isActive(): Boolean {
@@ -21,13 +14,19 @@ class User(
 
     //TODO : password 추후 암호화 필요
     fun checkPassword(password: String): Boolean {
-        return password.equals(password)
+        return this.password == password
     }
 
-    fun changePassword(oldPassword: String, newPassword: String) {
+    fun changePassword(oldPassword: String, newPassword: String): User {
         if (!checkPassword(oldPassword)) {
             throw IllegalArgumentException("기존 비밀번호가 일치하지않습니다.")
         }
-        this.password = newPassword
+        return User(
+            id = this.id,
+            name = this.name,
+            email = this.email,
+            password = newPassword,
+            active = this.active
+        )
     }
 }

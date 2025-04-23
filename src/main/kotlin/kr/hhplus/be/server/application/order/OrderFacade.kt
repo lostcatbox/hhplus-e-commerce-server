@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.application.order
 
 import kr.hhplus.be.server.domain.coupon.CouponService
-import kr.hhplus.be.server.domain.order.Order
+import kr.hhplus.be.server.domain.order.OrderCriteria
 import kr.hhplus.be.server.domain.order.OrderService
 import kr.hhplus.be.server.domain.payment.PaymentService
 import kr.hhplus.be.server.domain.product.ProductService
@@ -20,20 +20,29 @@ class OrderFacade(
     private val couponService: CouponService
 ) {
     @Transactional
-    fun processOrder(order: Order) {
+    fun processOrder(orderCriteria: OrderCriteria) {
         // 1. 유저 검증
-        userService.checkActiveUser(order.userId)
-        // 2. 상품 준비중 상태로 변경
+        userService.checkActiveUser(orderCriteria.userId)
+
+        // 2. 주문 생성
+        val order = orderService.createOrder(orderCriteria)
+
+        // 3. 상품 준비중 상태로 변경
         val productReadyOrder = orderService.changeProductReady(order)
-        // 3. 상품 재고 확인 및 차감
-        productService.saleOrderProducts(order.orderLines)
-        // 4. 발급된 쿠폰 사용 및 쿠폰 정보 조회
-        val coupon = couponService.useIssuedCoupon(order.issuedCouponId)
-        // 5. 결제 대기 상태로 변경
+
+        // 4. 상품 재고 확인 및 차감
+        productService.saleOrderProducts(orderCriteria.orderLines)
+
+        // 5. 발급된 쿠폰 사용 및 쿠폰 정보 조회
+        val coupon = couponService.useIssuedCoupon(orderCriteria.issuedCouponId)
+
+        // 6. 결제 대기 상태로 변경
         val readyForPaymentOrder = orderService.changePaymentReady(productReadyOrder)
-        // 6. 결제 처리
+
+        // 7. 결제 처리
         paymentService.pay(readyForPaymentOrder, coupon)
-        // 7. 결제 성공 상태로 변경
+
+        // 8. 결제 성공 상태로 변경
         orderService.changePaymentComplete(readyForPaymentOrder)
     }
 } 

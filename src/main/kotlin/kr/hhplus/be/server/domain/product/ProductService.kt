@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.product
 
 import kr.hhplus.be.server.domain.order.OrderLine
+import kr.hhplus.be.server.domain.order.OrderLineCriteria
 import kr.hhplus.be.server.exceptions.ProductNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,12 +19,12 @@ class ProductService(
     }
 
     @Transactional
-    fun saleOrderProducts(orderLines: List<OrderLine>) {
+    fun saleOrderProducts(orderLines: List<OrderLineCriteria>) {
         for (orderLine in orderLines) {
             val product = findById(orderLine.productId)
             // 재고 차감
-            product.sale(orderLine.quantity)
-            productRepository.save(product)
+            val updatedProduct = product.sale(orderLine.quantity)
+            productRepository.save(updatedProduct)
         }
     }
 }
