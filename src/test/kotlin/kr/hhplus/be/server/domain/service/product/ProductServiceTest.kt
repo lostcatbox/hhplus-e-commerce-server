@@ -9,11 +9,9 @@ import kr.hhplus.be.server.domain.order.OrderLineCriteria
 import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductRepository
 import kr.hhplus.be.server.domain.product.ProductService
-import kr.hhplus.be.server.exceptions.ProductNotFoundException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
@@ -77,16 +75,6 @@ class ProductServiceTest {
     }
 
     @Test
-    fun `아이디로 상품 조회 - 존재하지 않는 경우`() {
-        // When & Then
-        assertThrows<ProductNotFoundException> {
-            productService.findById(999L)
-        }
-
-        verify(exactly = 1) { productRepository.findById(999L) }
-    }
-
-    @Test
     fun `주문 상품 판매 처리 - 재고 차감`() {
         // Given
         val orderLines = listOf(
@@ -103,14 +91,13 @@ class ProductServiceTest {
             stock = 8L
         )
 
-        every { productRepository.findById(1L) } returns product
-        every { productRepository.save(any()) } returns updatedProduct
+        every { productRepository.findByIdWithPessimisticLock(1L) } returns product
 
         // When
         productService.saleOrderProducts(orderLines)
 
         // Then
-        verify(exactly = 1) { productRepository.findById(1L) }
+        verify(exactly = 1) { productRepository.findByIdWithPessimisticLock(1L) }
         verify(exactly = 1) { productRepository.save(any()) }
     }
 } 

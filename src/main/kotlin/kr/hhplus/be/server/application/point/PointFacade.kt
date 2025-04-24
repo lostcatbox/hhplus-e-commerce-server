@@ -17,7 +17,7 @@ class PointFacade(
 
     fun usePoint(userId: Long, useAmount: Long) {
         userService.checkActiveUser(userId)
-        return pointService.usePoint(userId, useAmount)
+        pointService.usePoint(userId, useAmount)
     }
 
     fun chargePoint(userId: Long, chargeAmount: Long) {

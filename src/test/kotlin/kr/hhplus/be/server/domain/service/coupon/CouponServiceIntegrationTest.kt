@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @SpringBootTest
 @Transactional
@@ -21,7 +20,7 @@ class CouponServiceIntegrationTest {
     @Autowired
     private lateinit var couponRepository: CouponRepository
 
-    private val userId = 1L
+    private val userId = 2L
     private lateinit var savedAmountCoupon: Coupon
     private lateinit var savedPercentCoupon: Coupon
 
@@ -29,7 +28,7 @@ class CouponServiceIntegrationTest {
     fun setup() {
         // 각 테스트가 시작되기 전에 데이터베이스를 깨끗한 상태로 유지
         // 기존에 발급된 쿠폰 등이 있다면 테스트에 방해가 될 수 있음
-        
+
         // 금액 쿠폰 생성 및 저장
         val amountCoupon = AmountCoupon(
             name = "5000원 할인 쿠폰",
@@ -37,7 +36,7 @@ class CouponServiceIntegrationTest {
             amount = 5000L,
             active = true
         )
-        
+
         // 퍼센트 쿠폰 생성 및 저장
         val percentCoupon = PercentageCoupon(
             name = "10% 할인 쿠폰",
@@ -49,7 +48,7 @@ class CouponServiceIntegrationTest {
         // 데이터베이스에 저장하고 반환된 객체를 필드에 저장
         savedAmountCoupon = couponRepository.save(amountCoupon)
         savedPercentCoupon = couponRepository.save(percentCoupon)
-        
+
         // 저장된 쿠폰이 유효한지 확인
         assertNotNull(savedAmountCoupon.id)
         assertNotNull(savedPercentCoupon.id)
@@ -98,7 +97,7 @@ class CouponServiceIntegrationTest {
             active = true
         )
         val savedZeroCoupon = couponRepository.save(zeroCoupon)
-        
+
         // 저장 확인
         assertNotNull(savedZeroCoupon)
         assertEquals(0L, savedZeroCoupon.stock)
@@ -108,17 +107,19 @@ class CouponServiceIntegrationTest {
         val exception = assertThrows<IllegalArgumentException> {
             couponService.issuedCoupon(userId, savedZeroCoupon.id)
         }
-        
+
         // 에러 메시지 검증 (선택적)
-        assertTrue(exception.message?.contains("사용 불가능한 쿠폰") == true || 
-                  exception.message?.contains("쿠폰 재고가 없습니다") == true)
+        assertTrue(
+            exception.message?.contains("사용 불가능한 쿠폰") == true ||
+                    exception.message?.contains("쿠폰 재고가 없습니다") == true
+        )
     }
 
     @Test
     fun `issuedCoupon - 존재하지 않는 쿠폰 발급 실패`() {
         // 존재하지 않는 쿠폰 ID (매우 큰 값으로 설정)
         val nonExistentCouponId = 999999L
-        
+
         // when & then
         assertThrows<EmptyResultDataAccessException> {
             couponService.issuedCoupon(userId, nonExistentCouponId)
@@ -171,12 +172,12 @@ class CouponServiceIntegrationTest {
         // then
         assertNull(result, "쿠폰 ID가 null이면 결과도 null이어야 합니다.")
     }
-    
+
     @Test
     fun `useIssuedCoupon - 존재하지 않는 쿠폰 ID 처리`() {
         // 존재하지 않는 발급 쿠폰 ID
         val nonExistentIssuedCouponId = 999999L
-        
+
         // when & then
         assertThrows<EmptyResultDataAccessException> {
             couponService.useIssuedCoupon(nonExistentIssuedCouponId)
