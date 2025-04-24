@@ -29,25 +29,12 @@ class OrderController(
     @PostMapping("")
     fun processOrder(@RequestBody @Valid request: OrderRequest): ResponseEntity<OrderResponse> {
         // OrderRequest를 OrderCriteria로 변환
-        val orderCriteria = OrderCriteria(
-            userId = request.userId,
-            issuedCouponId = request.couponId,
-            orderLines = request.orderLines.map { 
-                OrderLineCriteria(
-                    productId = it.productId,
-                    quantity = it.quantity.toLong()
-                )
-            }
-        )
+        val orderCriteria = request.toCommand()
         
         // OrderFacade를 통해 주문 처리
-        orderFacade.processOrder(orderCriteria)
+        val order = orderFacade.processOrder(orderCriteria)
         
-        return ResponseEntity.ok(
-            OrderResponse(
-                orderId = 1L, // 실제로는 주문 ID를 반환해야 함
-                status = "결제완료"
-            )
-        )
+        // 주문 정보를 응답으로 변환하여 반환
+        return ResponseEntity.ok(OrderResponse.of(order))
     }
 }
