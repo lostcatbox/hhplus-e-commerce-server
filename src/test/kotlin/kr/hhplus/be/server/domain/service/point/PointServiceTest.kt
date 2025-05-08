@@ -63,7 +63,7 @@ class PointServiceTest {
 
     @Test
     fun `포인트 사용`() {
-        every { pointRepository.findByUserIdWithPessimisticLock(userId) } returns point
+        every { pointRepository.findByUserId(userId) } returns point
         // Given
         val useAmount = 5000L
 
@@ -77,7 +77,7 @@ class PointServiceTest {
 
     @Test
     fun `포인트 충전`() {
-        every { pointRepository.findByUserIdWithPessimisticLock(userId) } returns point
+        every { pointRepository.findByUserId(userId) } returns point
         // Given
         val chargeAmount = 5000L
 
@@ -91,7 +91,7 @@ class PointServiceTest {
 
     @Test
     fun `포인트가 없는 사용자에게 포인트 충전`() {
-        every { pointRepository.findByUserIdWithPessimisticLock(999L) } returns null
+        every { pointRepository.findByUserId(999L) } returns null
         // Given
         val noPointUserId = 999L
         val chargeAmount = 5000L

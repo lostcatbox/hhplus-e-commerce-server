@@ -49,6 +49,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
+    // Redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.redisson:redisson-spring-boot-starter:3.25.2")
+
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
     // DB
