@@ -8,7 +8,9 @@ import kr.hhplus.be.server.domain.coupon.PercentageCoupon
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 class CouponsTest {
 
     @Nested

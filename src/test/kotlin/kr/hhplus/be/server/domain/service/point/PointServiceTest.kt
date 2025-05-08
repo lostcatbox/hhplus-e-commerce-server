@@ -31,13 +31,14 @@ class PointServiceTest {
         point = Point(userId = userId, amount = 10000L)
         emptyPoint = Point.EMPTY(userId)
 
-        every { pointRepository.findByUserId(userId) } returns point
-        every { pointRepository.findByUserId(999L) } returns null
         every { pointRepository.save(any()) } returnsArgument 0
+
     }
 
     @Test
     fun `포인트 조회 - 포인트가 존재하는 경우`() {
+        every { pointRepository.findByUserId(userId) } returns point
+
         // When
         val result = pointService.getPoint(userId)
 
@@ -49,6 +50,8 @@ class PointServiceTest {
 
     @Test
     fun `포인트 조회 - 포인트가 존재하지 않는 경우 빈 포인트 반환`() {
+
+        every { pointRepository.findByUserId(999L) } returns null
         // When
         val result = pointService.getPoint(999L)
 
@@ -60,43 +63,44 @@ class PointServiceTest {
 
     @Test
     fun `포인트 사용`() {
+        every { pointRepository.findByUserIdWithPessimisticLock(userId) } returns point
         // Given
         val useAmount = 5000L
-        val updatedPoint = Point(userId = userId, amount = 5000L)
 
         // When
-        pointService.usePoint(userId, useAmount)
+        val usePoint = pointService.usePoint(userId, useAmount)
 
         // Then
-        verify(exactly = 1) { pointRepository.findByUserId(userId) }
-        verify { pointRepository.save(any()) }
+        assertEquals(point.amount - useAmount, usePoint.amount)
+        verify { pointRepository.save(usePoint) }
     }
 
     @Test
     fun `포인트 충전`() {
+        every { pointRepository.findByUserIdWithPessimisticLock(userId) } returns point
         // Given
         val chargeAmount = 5000L
-        val updatedPoint = Point(userId = userId, amount = 15000L)
 
         // When
-        pointService.chargePoint(userId, chargeAmount)
+        val chargePoint = pointService.chargePoint(userId, chargeAmount)
 
         // Then
-        verify(exactly = 1) { pointRepository.findByUserId(userId) }
+        assertEquals(chargeAmount + point.amount, chargePoint.amount)
         verify { pointRepository.save(any()) }
     }
 
     @Test
     fun `포인트가 없는 사용자에게 포인트 충전`() {
+        every { pointRepository.findByUserIdWithPessimisticLock(999L) } returns null
         // Given
         val noPointUserId = 999L
         val chargeAmount = 5000L
 
         // When
-        pointService.chargePoint(noPointUserId, chargeAmount)
+        val chargePoint = pointService.chargePoint(noPointUserId, chargeAmount)
 
         // Then
-        verify(exactly = 1) { pointRepository.findByUserId(noPointUserId) }
-        verify { pointRepository.save(any()) }
+        assertEquals(chargeAmount, chargePoint.amount)
+        verify { pointRepository.save(chargePoint) }
     }
 } 

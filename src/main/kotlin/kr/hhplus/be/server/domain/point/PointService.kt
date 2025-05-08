@@ -13,18 +13,18 @@ class PointService(
     }
 
     @Transactional
-    fun usePoint(userId: Long, useAmount: Long) {
+    fun usePoint(userId: Long, useAmount: Long): Point {
         // 비관적 락을 사용하여 포인트 조회
         val point = pointRepository.findByUserIdWithPessimisticLock(userId) ?: Point.EMPTY(userId)
         val updatedPoint = point.usePoint(useAmount)
-        pointRepository.save(updatedPoint)
+        return pointRepository.save(updatedPoint)
     }
 
     @Transactional
-    fun chargePoint(userId: Long, chargeAmount: Long) {
+    fun chargePoint(userId: Long, chargeAmount: Long): Point {
         // 비관적 락을 사용하여 포인트 조회
         val point = pointRepository.findByUserIdWithPessimisticLock(userId) ?: Point.EMPTY(userId)
         val updatedPoint = point.chargePoint(chargeAmount)
-        pointRepository.save(updatedPoint)
+        return pointRepository.save(updatedPoint)
     }
 }
