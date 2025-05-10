@@ -10,6 +10,7 @@ class CouponFacade(
     private val userService: UserService,
     private val couponService: CouponService
 ) {
+
     fun getUserCouponList(userId: Long): List<Coupon> {
         userService.checkActiveUser(userId)
         return couponService.getUserCouponList(userId)

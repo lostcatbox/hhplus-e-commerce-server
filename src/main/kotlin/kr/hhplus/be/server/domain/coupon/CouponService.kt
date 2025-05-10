@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.coupon
 
+import kr.hhplus.be.server.support.distributedlock.DistributedLock
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,6 +13,7 @@ class CouponService(
     }
 
     @Transactional
+    @DistributedLock(key = "issued_coupon_lock")
     fun issuedCoupon(userId: Long, couponId: Long) {
         // 비관적 락을 사용하여 쿠폰 조회
         val coupon = couponRepository.findByIdWithPessimisticLock(couponId)
