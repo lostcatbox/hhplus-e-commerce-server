@@ -1,4 +1,4 @@
-package com.example.server.config
+package kr.hhplus.be.server.config
 
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
@@ -23,9 +23,17 @@ class CacheConfig {
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJackson2JsonRedisSerializer()))
             .disableCachingNullValues()
 
+        // 인기 상품 캐시 설정 추가
+        val popularProductsConfig = RedisCacheConfiguration.defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(10)) // 인기 상품은 10분간 캐싱
+            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(StringRedisSerializer()))
+            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJackson2JsonRedisSerializer()))
+            .disableCachingNullValues()
+
         return RedisCacheManager.RedisCacheManagerBuilder
             .fromConnectionFactory(connectionFactory)
             .cacheDefaults(cacheConfig)
+            .withCacheConfiguration("popularProducts", popularProductsConfig) // 인기 상품 캐시 설정 적용
             .build()
     }
 } 
