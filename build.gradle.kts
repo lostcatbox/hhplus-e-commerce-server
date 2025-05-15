@@ -76,10 +76,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "mockito-core")
     }
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    testImplementation("org.mockito:mockito-junit-jupiter:4.5.1")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
-    testImplementation("org.springframework:spring-test:5.3.20")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.3.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
     testImplementation("io.kotest:kotest-assertions-core:5.5.4")
 }
 
