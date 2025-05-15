@@ -3,17 +3,18 @@ package kr.hhplus.be.server.application.product
 import kr.hhplus.be.server.domain.product.PopularProduct
 import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductService
-import kr.hhplus.be.server.domain.product.ProductStatisticService
+import kr.hhplus.be.server.domain.product.ProductStatisticRepository
 import org.slf4j.LoggerFactory
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Service
 class ProductFacade(
     private val productService: ProductService,
-    private val popularProductStatisticService: ProductStatisticService
+    private val popularProductStatisticRepository: ProductStatisticRepository
 ) {
     val log = LoggerFactory.getLogger(javaClass)
+
     fun getAllProducts(): List<Product> {
         return productService.findAll()
     }
@@ -23,14 +24,13 @@ class ProductFacade(
     }
 
     // 인기 상품 목록을 가져오는 메서드
-    // Redis 캐싱 적용
-    @Cacheable(
-        value = ["popularProducts"],
-        unless = "#result.isEmpty()"
-    )
+    // 클라이언트 사이드 캐싱만 활용 (Redis에서 이미 관리됨)
     fun getPopularProducts(): List<PopularProduct> {
-        // 여기서는, 단순히 전체 상품 목록을 반환
-        // 실제로는 인기 상품을 판별하는 로직이 필요
-        return popularProductStatisticService.findAll()
+        return popularProductStatisticRepository.findAll()
+    }
+
+    // 특정 날짜의 인기 상품 목록 조회
+    fun getPopularProductsByDate(date: LocalDate): List<PopularProduct> {
+        return popularProductStatisticRepository.findAllByDate(date)
     }
 } 
