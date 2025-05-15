@@ -15,6 +15,10 @@ class ProductRepositoryImpl(
         return productJpaRepository.findAll().map { it.toDomain() }
     }
 
+    override fun findAllByIdInIds(ids: List<Long>): List<Product> {
+        return productJpaRepository.findAllByIdIn(ids).map { it.toDomain() }
+    }
+
     override fun findById(productId: Long): Product {
         return productJpaRepository.findById(productId)
             .map { it.toDomain() }
@@ -26,7 +30,7 @@ class ProductRepositoryImpl(
         val savedEntity = productJpaRepository.save(entity)
         return savedEntity.toDomain()
     }
-    
+
     override fun findByIdWithPessimisticLock(productId: Long): Product {
         return productJpaRepository.findByIdWithPessimisticLock(productId)
             ?.toDomain()

@@ -1,8 +1,9 @@
 package kr.hhplus.be.server.domain.product
 
-import org.springframework.stereotype.Repository
+import java.time.LocalDate
 
-@Repository
 interface ProductStatisticRepository {
-    fun findPopularProducts(): List<PopularProduct>
+    fun findAll(): List<PopularProduct>
+    fun findAllByDate(date: LocalDate = LocalDate.now()): List<PopularProduct>
+    fun incrementOrderCount(productId: Long)
 }
