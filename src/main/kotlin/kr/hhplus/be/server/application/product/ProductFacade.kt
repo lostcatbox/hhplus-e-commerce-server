@@ -1,14 +1,19 @@
 package kr.hhplus.be.server.application.product
 
+import kr.hhplus.be.server.domain.product.PopularProduct
 import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.ProductService
+import kr.hhplus.be.server.domain.product.ProductStatisticService
+import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 
 @Service
 class ProductFacade(
-    private val productService: ProductService
+    private val productService: ProductService,
+    private val popularProductStatisticService: ProductStatisticService
 ) {
+    val log = LoggerFactory.getLogger(javaClass)
     fun getAllProducts(): List<Product> {
         return productService.findAll()
     }
@@ -23,9 +28,9 @@ class ProductFacade(
         value = ["popularProducts"],
         unless = "#result.isEmpty()"
     )
-    fun getPopularProducts(): List<Product> {
+    fun getPopularProducts(): List<PopularProduct> {
         // 여기서는, 단순히 전체 상품 목록을 반환
         // 실제로는 인기 상품을 판별하는 로직이 필요
-        return productService.findAll()
+        return popularProductStatisticService.findAll()
     }
 } 

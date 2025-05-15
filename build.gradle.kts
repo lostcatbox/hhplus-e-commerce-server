@@ -48,7 +48,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
-
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.redisson:redisson-spring-boot-starter:3.25.2")
@@ -71,6 +71,16 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.+")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(kotlin("test"))
+
+    // Test dependencies
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "mockito-core")
+    }
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.mockito:mockito-junit-jupiter:4.5.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("org.springframework:spring-test:5.3.20")
+    testImplementation("io.kotest:kotest-assertions-core:5.5.4")
 }
 
 tasks.withType<Test> {
