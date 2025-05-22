@@ -23,6 +23,12 @@ class CouponServiceTest {
     @MockK
     private lateinit var couponRepository: CouponRepository
 
+    @MockK
+    private lateinit var issuedCouponRepository: IssuedCouponRepository
+
+    @MockK
+    private lateinit var couponRedisRepository: CouponRedisRepository
+
     @InjectMockKs
     private lateinit var couponService: CouponService
 

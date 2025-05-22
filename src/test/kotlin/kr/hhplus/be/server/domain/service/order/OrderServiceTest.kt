@@ -7,6 +7,7 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import kr.hhplus.be.server.domain.order.*
 import kr.hhplus.be.server.domain.product.ProductService
+import kr.hhplus.be.server.domain.product.ProductStatisticRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,6 +25,9 @@ class OrderServiceTest {
 
     @MockK
     private lateinit var productService: ProductService
+
+    @MockK
+    private lateinit var productStatisticRepository: ProductStatisticRepository
 
     @InjectMockKs
     private lateinit var orderService: OrderService
@@ -127,6 +131,7 @@ class OrderServiceTest {
             orderDateTime = order.orderDateTime, orderStatus = expectedStatus
         )
         every { orderRepository.save(any()) } returns expectedOrder
+        every { productStatisticRepository.incrementOrderCount(any()) } returns Unit
 
         // When
         val result = orderService.changePaymentComplete(order)
