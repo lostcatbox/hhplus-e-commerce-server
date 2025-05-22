@@ -131,6 +131,7 @@ class OrderServiceTest {
             orderDateTime = order.orderDateTime, orderStatus = expectedStatus
         )
         every { orderRepository.save(any()) } returns expectedOrder
+        every { productStatisticRepository.incrementOrderCount(any()) } returns Unit
 
         // When
         val result = orderService.changePaymentComplete(order)

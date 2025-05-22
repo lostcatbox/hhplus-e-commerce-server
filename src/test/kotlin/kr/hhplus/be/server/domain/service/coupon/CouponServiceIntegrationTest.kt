@@ -60,11 +60,11 @@ class CouponServiceIntegrationTest {
     fun `getUserCouponList - 사용자의 쿠폰 목록 조회`() {
         // given
         // 쿠폰 발급 (반드시 저장된 쿠폰의 ID를 사용)
-        couponService.issuedCoupon(userId, savedAmountCoupon.id)
-        couponService.issuedCoupon(userId, savedPercentCoupon.id)
+        couponService.issuedCoupon(userId + 1, savedAmountCoupon.id)
+        couponService.issuedCoupon(userId + 1, savedPercentCoupon.id)
 
         // when
-        val userCoupons = couponService.getUserCouponList(userId)
+        val userCoupons = couponService.getUserCouponList(userId + 1)
 
         // then
         assertEquals(2, userCoupons.size)
@@ -75,10 +75,10 @@ class CouponServiceIntegrationTest {
     @Test
     fun `issuedCoupon - 쿠폰 발급 성공`() {
         // when
-        couponService.issuedCoupon(userId, savedAmountCoupon.id)
+        couponService.issuedCoupon(userId + 3, savedAmountCoupon.id)
 
         // then
-        val userCoupons = couponService.getUserCouponList(userId)
+        val userCoupons = couponService.getUserCouponList(userId + 3)
         assertEquals(1, userCoupons.size)
 
         // 쿠폰 재고 감소 확인
