@@ -1,9 +1,9 @@
 package kr.hhplus.be.server.infra.persistance.model
 
 import jakarta.persistence.*
-import kr.hhplus.be.server.domain.product.Product
 import kr.hhplus.be.server.domain.product.PopularProduct
 import kr.hhplus.be.server.domain.product.PopularProductId
+import kr.hhplus.be.server.domain.product.Product
 import java.time.LocalDate
 
 @Entity(name = "products")
@@ -11,11 +11,11 @@ class ProductEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
-    
+
     val name: String,
-    
+
     val price: Long,
-    
+
     val stock: Long //잔여 수량
 ) {
     // 도메인 모델로 변환
@@ -27,7 +27,7 @@ class ProductEntity(
             stock = this.stock
         )
     }
-    
+
     companion object {
         // 도메인 모델로부터 엔티티 생성
         fun from(domain: Product): ProductEntity {
@@ -45,7 +45,7 @@ class ProductEntity(
 class PopularProductEntity(
     @EmbeddedId
     val popularProductId: PopularProductIdEntity,
-    
+
     val orderCount: Long // 하루당 총 주문량
 ) {
     // 도메인 모델로 변환
@@ -55,7 +55,7 @@ class PopularProductEntity(
             orderCount = this.orderCount
         )
     }
-    
+
     companion object {
         // 도메인 모델로부터 엔티티 생성
         fun from(domain: PopularProduct): PopularProductEntity {
@@ -70,7 +70,6 @@ class PopularProductEntity(
 @Embeddable
 class PopularProductIdEntity(
     val productId: Long,
-    
     val dateTime: LocalDate
 ) {
     // 도메인 모델로 변환
@@ -80,7 +79,7 @@ class PopularProductIdEntity(
             dateTime = this.dateTime
         )
     }
-    
+
     companion object {
         // 도메인 모델로부터 엔티티 생성
         fun from(domain: PopularProductId): PopularProductIdEntity {

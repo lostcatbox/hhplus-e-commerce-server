@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.domain.product
 
-import kr.hhplus.be.server.domain.order.OrderLine
 import kr.hhplus.be.server.domain.order.OrderLineCriteria
 import kr.hhplus.be.server.exceptions.ProductNotFoundException
 import org.springframework.stereotype.Service
@@ -8,10 +7,14 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ProductService(
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
 ) {
     fun findAll(): List<Product> {
         return productRepository.findAll()
+    }
+
+    fun findAllByIdInIds(ids: List<Long>): List<Product> {
+        return productRepository.findAllByIdInIds(ids)
     }
 
     fun findById(id: Long): Product {

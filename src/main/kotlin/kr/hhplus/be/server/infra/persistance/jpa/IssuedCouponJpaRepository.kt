@@ -16,4 +16,7 @@ interface IssuedCouponJpaRepository : JpaRepository<IssuedCouponEntity, Long> {
     fun findByIdWithPessimisticLock(@Param("issuedCouponId") issuedCouponId: Long): IssuedCouponEntity?
     fun findAllByUserId(userId: Long): List<IssuedCouponEntity>
     fun findOneByUserIdAndCouponId(userId: Long, couponId: Long): IssuedCouponEntity
+    fun findByUserId(userId: Long): List<IssuedCoupon>
+    fun findByCouponId(couponId: Long): List<IssuedCoupon>
+    fun findByCouponIdAndUserId(couponId: Long, userId: Long): IssuedCoupon?
 }

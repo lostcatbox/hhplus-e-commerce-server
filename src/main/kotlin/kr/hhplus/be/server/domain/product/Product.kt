@@ -1,13 +1,16 @@
 package kr.hhplus.be.server.domain.product
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.time.LocalDate
 
 // 순수 도메인 모델로 변경
+
 class Product(
-    val id: Long = 0L,
+    val id: Long = 0,
     val name: String,
     val price: Long,
-    var stock: Long //잔여 수량
+    val stock: Long
 ) {
     init {
         require(price >= 0) { "가격은 0 이상이여야 합니다." }
@@ -26,25 +29,11 @@ class Product(
     }
 }
 
-// 순수 도메인 모델로 변경
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 class PopularProduct(
-    val popularProductId: PopularProductId,
-    val orderCount: Long, // 하루당 총 주문량
-) {
-    fun saleCount(saleAmount: Long): PopularProduct {
-        return PopularProduct(
-            popularProductId = popularProductId,
-            orderCount = orderCount + saleAmount
-        )
-    }
-
-    fun cancelSaleCount(cancelSaleAmount: Long): PopularProduct {
-        return PopularProduct(
-            popularProductId = popularProductId,
-            orderCount = orderCount - cancelSaleAmount
-        )
-    }
-}
+    @JsonProperty("popularProductId") val popularProductId: PopularProductId,
+    @JsonProperty("orderCount") val orderCount: Long, // 하루당 총 주문량
+)
 
 // 순수 도메인 모델로 변경
 class PopularProductId(

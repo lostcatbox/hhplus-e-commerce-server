@@ -92,80 +92,29 @@ class ProductTest {
             saledProduct.id shouldBe product.id
             saledProduct.name shouldBe product.name
             saledProduct.price shouldBe product.price
-            
+
             // 원본 product는 변경되지 않음
             product.stock shouldBe 100L
         }
     }
 
-    @Nested
-    @DisplayName("PopularProduct 테스트")
-    inner class PopularProductTest {
-        private val now = LocalDate.now()
+    @Test
+    fun `인기 상품 생성`() {
+        val now = LocalDate.now()
+        // when
+        val popularProduct = PopularProduct(
+            PopularProductId(
+                productId = 1L,
+                dateTime = now
+            ),
+            orderCount = 0L,
 
-        @Test
-        fun `인기 상품 판매량 증가`() {
-            // given
-            val popularProduct = PopularProduct(
-                PopularProductId(
-                    productId = 1L,
-                    dateTime = now
-                ),
-                orderCount = 100L,
-
-                )
-
-            // when
-            val result = popularProduct.saleCount(10L)
-
-            // then
-            result.orderCount shouldBe 110L
-            result.popularProductId.productId shouldBe popularProduct.popularProductId.productId
-            result.popularProductId.dateTime shouldBe popularProduct.popularProductId.dateTime
-            
-            // 원본 popularProduct는 변경되지 않음
-            popularProduct.orderCount shouldBe 100L
-        }
-
-        @Test
-        fun `인기 상품 판매량 취소`() {
-            // given
-            val popularProduct = PopularProduct(
-                PopularProductId(
-                    productId = 1L,
-                    dateTime = now
-                ),
-                orderCount = 100L
             )
 
-            // when
-            val result = popularProduct.cancelSaleCount(10L)
-
-            // then
-            result.orderCount shouldBe 90L
-            result.popularProductId.productId shouldBe popularProduct.popularProductId.productId
-            result.popularProductId.dateTime shouldBe popularProduct.popularProductId.dateTime
-            
-            // 원본 popularProduct는 변경되지 않음
-            popularProduct.orderCount shouldBe 100L
-        }
-
-        @Test
-        fun `인기 상품 생성`() {
-            // when
-            val popularProduct = PopularProduct(
-                PopularProductId(
-                    productId = 1L,
-                    dateTime = now
-                ),
-                orderCount = 0L,
-
-                )
-
-            // then
-            popularProduct.popularProductId.productId shouldBe 1L
-            popularProduct.orderCount shouldBe 0L
-            popularProduct.popularProductId.dateTime shouldBe now
-        }
+        // then
+        popularProduct.popularProductId.productId shouldBe 1L
+        popularProduct.orderCount shouldBe 0L
+        popularProduct.popularProductId.dateTime shouldBe now
     }
+
 }

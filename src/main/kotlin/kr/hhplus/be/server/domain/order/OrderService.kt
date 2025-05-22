@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.order
 
 import kr.hhplus.be.server.domain.product.ProductService
+import kr.hhplus.be.server.domain.product.ProductStatisticRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -8,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional
 class OrderService(
     private val orderRepository: OrderRepository,
     private val orderHistoryRepository: OrderHistoryRepository,
-    private val productService: ProductService
+    private val productService: ProductService,
+    private val productStatisticRepository: ProductStatisticRepository
 ) {
     @Transactional
     fun createOrder(orderCriteria: OrderCriteria): Order {
@@ -58,6 +60,8 @@ class OrderService(
         val updatedOrder = order.finishPay()
         val savedOrder = orderRepository.save(updatedOrder)
         saveOrderHistory(savedOrder)
+        //제품 분석 서비스에서 판매량 증가 로직실행
+        productStatisticRepository.incrementOrderCount(order.orderLines[0].productId)
         return savedOrder
     }
 
