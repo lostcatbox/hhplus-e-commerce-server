@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.infrastructure.redis
+package kr.hhplus.be.server.infra.inmemory.redis
 
 import kr.hhplus.be.server.domain.product.PopularProduct
 import kr.hhplus.be.server.domain.product.PopularProductId

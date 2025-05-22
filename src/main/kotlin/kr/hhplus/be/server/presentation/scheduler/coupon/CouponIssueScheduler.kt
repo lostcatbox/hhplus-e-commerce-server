@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.infrastructure.scheduler
+package kr.hhplus.be.server.presentation.scheduler.coupon
 
 import kr.hhplus.be.server.domain.coupon.CouponService
 import org.slf4j.LoggerFactory
@@ -13,7 +13,7 @@ class CouponIssueScheduler(
     private val couponService: CouponService
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
-    
+
     /**
      * 5초 간격으로 대기 중인 쿠폰 발급 요청 처리
      */
@@ -22,7 +22,7 @@ class CouponIssueScheduler(
         try {
             val batchSize = 100 // 한 번에 처리할 최대 요청 수
             val processedCount = couponService.processPendingCouponIssues(batchSize)
-            
+
             if (processedCount > 0) {
                 logger.info("쿠폰 발급 요청 처리 완료: $processedCount 건")
             }
@@ -30,4 +30,4 @@ class CouponIssueScheduler(
             logger.error("쿠폰 발급 요청 처리 중 오류 발생", e)
         }
     }
-} 
+}
