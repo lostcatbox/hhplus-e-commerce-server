@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.order
 
+import kr.hhplus.be.server.application.order.event.OrderEventPublisher
 import kr.hhplus.be.server.domain.coupon.CouponService
 import kr.hhplus.be.server.domain.order.Order
 import kr.hhplus.be.server.domain.order.OrderCriteria
@@ -18,7 +19,8 @@ class OrderFacade(
     private val userService: UserService,
     private val productService: ProductService,
     private val paymentService: PaymentService,
-    private val couponService: CouponService
+    private val couponService: CouponService,
+    private val orderEventPublisher: OrderEventPublisher
 ) {
     @Transactional
     fun processOrder(orderCriteria: OrderCriteria): Order {
@@ -45,8 +47,11 @@ class OrderFacade(
 
         // 8. 결제 성공 상태로 변경
         val completedOrder = orderService.changePaymentComplete(readyForPaymentOrder)
-        
-        // 9. 완료된 주문 반환
+
+        // 9. 결제 완료 이벤트 발행 (데이터 플랫폼 전송을 위한 이벤트)
+        orderEventPublisher.publishOrderCompleted(completedOrder)
+
+        // 10. 완료된 주문 반환
         return completedOrder
     }
 } 
