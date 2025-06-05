@@ -35,6 +35,7 @@ services:
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: localhost
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_CREATE_TOPICS: "order-completed:3:1,coupon-issued:3:1"
     volumes:
       - kafka-data:/var/lib/kafka/data
 
