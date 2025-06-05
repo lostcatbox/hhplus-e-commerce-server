@@ -49,9 +49,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+    
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.redisson:redisson-spring-boot-starter:3.25.2")
+
+    // Kafka
+    implementation("org.springframework.kafka:spring-kafka")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
@@ -71,6 +75,13 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.+")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(kotlin("test"))
+    
+    // 비동기 테스트를 위한 Awaitility
+    testImplementation("org.awaitility:awaitility:4.2.0")
+    testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
+    
+    // Kafka Test
+    testImplementation("org.springframework.kafka:spring-kafka-test")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
