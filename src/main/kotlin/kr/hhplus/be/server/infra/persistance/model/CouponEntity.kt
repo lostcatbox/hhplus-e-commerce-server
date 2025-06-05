@@ -5,6 +5,7 @@ import kr.hhplus.be.server.domain.coupon.AmountCoupon
 import kr.hhplus.be.server.domain.coupon.Coupon
 import kr.hhplus.be.server.domain.coupon.IssuedCoupon
 import kr.hhplus.be.server.domain.coupon.PercentageCoupon
+import java.time.LocalDateTime
 
 @Entity(name = "coupons")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -117,7 +118,10 @@ class IssuedCouponEntity(
     val userId: Long,
 
     @Column(name = "is_used")
-    val isUsed: Boolean
+    val isUsed: Boolean,
+    
+    @Column(name = "issued_at")
+    val issuedAt: LocalDateTime = LocalDateTime.now()
 ) {
     // 도메인 모델로 변환
     fun toDomain(): IssuedCoupon {
@@ -125,7 +129,8 @@ class IssuedCouponEntity(
             id = this.id,
             couponId = this.couponId,
             userId = this.userId,
-            isUsed = this.isUsed
+            isUsed = this.isUsed,
+            issuedAt = this.issuedAt
         )
     }
 
@@ -136,7 +141,8 @@ class IssuedCouponEntity(
                 id = domain.id,
                 couponId = domain.couponId,
                 userId = domain.userId,
-                isUsed = domain.isUsed
+                isUsed = domain.isUsed,
+                issuedAt = domain.issuedAt
             )
         }
     }

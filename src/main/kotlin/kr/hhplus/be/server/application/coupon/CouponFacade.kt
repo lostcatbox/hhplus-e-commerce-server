@@ -27,16 +27,16 @@ class CouponFacade(
         userService.checkActiveUser(userId)
         
         // 쿠폰 발급 (핵심 비즈니스 로직)
-        val issuedCoupon = couponService.issuedCoupon(userId, couponId)
+        val issuedResult = couponService.issuedCoupon(userId, couponId)
         
         try {
             // Kafka 이벤트 발행 (비동기 처리)
             val kafkaEvent = CouponIssuedKafkaEvent(
-                couponId = issuedCoupon.id,
+                couponId = issuedResult.issuedCoupon.id,
                 userId = userId,
-                couponName = issuedCoupon.name,
-                discountAmount = issuedCoupon.discountAmount,
-                issuedAt = issuedCoupon.issuedAt.toString()
+                couponName = issuedResult.remainingCoupon.name,
+                discountAmount = issuedResult.remainingCoupon.getDiscountAmount(),
+                issuedAt = issuedResult.issuedCoupon.issuedAt.toString()
             )
             
             couponKafkaProducer.publishCouponIssued(kafkaEvent)

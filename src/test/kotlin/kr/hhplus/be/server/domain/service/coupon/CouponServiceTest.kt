@@ -87,7 +87,7 @@ class CouponServiceTest {
         every { couponRepository.findById(couponId) } returns coupon
         every { couponRepository.findByIdWithPessimisticLock(couponId) } returns coupon
         every { couponRepository.findIssuedCouponById(any()) } returns issuedCoupon
-        every { couponRepository.save(any<IssueCouponAndIssuedCoupon>()) } returns Unit
+        every { couponRepository.save(any<IssueCouponAndIssuedCoupon>()) } returns issueCouponAndIssuedCoupon
         every { couponRepository.save(any<IssuedCoupon>()) } returns updatedIssuedCoupon
         every { issuedCoupon.useCoupon() } returns updatedIssuedCoupon
     }
@@ -143,7 +143,7 @@ class CouponServiceTest {
         // 쿠폰 발급 및 저장 설정
         mockCoupons.forEachIndexed { idx, mockCoupon ->
             every { mockCoupon.issueTo(any()) } returns mockResults[idx]
-            every { couponRepository.save(mockResults[idx]) } returns Unit
+            every { couponRepository.save(mockResults[idx]) } returns mockResults[idx]
         }
 
         // When - 여러 스레드에서 동시에 쿠폰 발급 요청
