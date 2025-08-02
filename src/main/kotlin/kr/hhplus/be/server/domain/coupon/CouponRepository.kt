@@ -10,6 +10,6 @@ interface CouponRepository {
     fun save(issuedCoupon: IssuedCoupon): IssuedCoupon
     fun save(coupon: Coupon): Coupon
     fun findIssuedCouponById(issuedCouponId: Long): IssuedCoupon
-    fun save(issuedCouponAndCoupon: IssueCouponAndIssuedCoupon)
+    fun save(issuedCouponAndCoupon: IssueCouponAndIssuedCoupon): IssueCouponAndIssuedCoupon
     fun findByIdWithPessimisticLock(id: Long): Coupon
 }

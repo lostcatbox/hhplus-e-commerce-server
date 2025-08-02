@@ -18,6 +18,9 @@ abstract class Coupon(
     }
 
     abstract fun discountAmount(originAmount: Long): Long
+    
+    // 쿠폰의 할인 금액을 반환하는 추상 메서드 추가
+    abstract fun getDiscountAmount(): Long
 
     fun issueTo(userId: Long): IssueCouponAndIssuedCoupon {
         require(isAvailable()) { "사용 불가능한 쿠폰입니다." }
@@ -57,6 +60,10 @@ class AmountCoupon(
         }
         return resultAmount
     }
+    
+    override fun getDiscountAmount(): Long {
+        return amount
+    }
 
     override fun createWithDecreasedStock(): Coupon {
         return AmountCoupon(
@@ -86,6 +93,12 @@ class PercentageCoupon(
     override fun discountAmount(originAmount: Long): Long {
         return (originAmount * (1 - percent / 100)).toLong()
     }
+    
+    override fun getDiscountAmount(): Long {
+        // 퍼센트 쿠폰의 경우 고정 할인 금액이 없으므로 0을 반환하거나
+        // 또는 percent 값을 Long으로 변환하여 반환 (예: 10% -> 10)
+        return percent.toLong()
+    }
 
     override fun createWithDecreasedStock(): Coupon {
         return PercentageCoupon(
@@ -103,7 +116,8 @@ class IssuedCoupon(
     val id: Long = 0L,
     val couponId: Long,
     val userId: Long,
-    val isUsed: Boolean
+    val isUsed: Boolean,
+    val issuedAt: LocalDateTime = LocalDateTime.now()
 ) {
     fun canBeUsed(): Boolean {
         return !isUsed
@@ -115,7 +129,8 @@ class IssuedCoupon(
             id = this.id,
             couponId = this.couponId,
             userId = this.userId,
-            isUsed = true
+            isUsed = true,
+            issuedAt = this.issuedAt
         )
     }
 }

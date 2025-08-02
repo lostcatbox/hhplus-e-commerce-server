@@ -19,11 +19,11 @@ class CouponService(
 
     @Transactional
     @DistributedLock(key = "issued_coupon_lock")
-    fun issuedCoupon(userId: Long, couponId: Long) {
+    fun issuedCoupon(userId: Long, couponId: Long): IssueCouponAndIssuedCoupon {
         // 비관적 락을 사용하여 쿠폰 조회
         val coupon = couponRepository.findByIdWithPessimisticLock(couponId)
         val issuedCouponAndCoupon = coupon.issueTo(userId)
-        couponRepository.save(issuedCouponAndCoupon)
+        return couponRepository.save(issuedCouponAndCoupon)
     }
 
     fun findByIssuedCouponId(issuedCouponId: Long): IssuedCouponAndCouponVO {
@@ -148,15 +148,15 @@ class CouponService(
     fun getCouponStock(couponId: Long): Long {
         // 1. Redis에서 먼저 조회 시도
         val redisStock = couponRedisRepository.getStock(couponId)
-        
+
         // 2. Redis에 재고 정보가 있으면 해당 값 반환
         if (redisStock > 0) {
             return redisStock
         }
-        
+
         // 3. Redis에 재고 정보가 없거나 0이면 DB에서 조회
         val coupon = couponRepository.findById(couponId)
-        
+
         // 4. DB에서 조회된 값 반환 (없으면 0)
         return coupon?.stock ?: 0
     }

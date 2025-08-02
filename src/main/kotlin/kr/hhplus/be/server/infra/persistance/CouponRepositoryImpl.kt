@@ -44,9 +44,13 @@ class CouponRepositoryImpl(
     }
 
     @Transactional
-    override fun save(issueCouponAndIssuedCoupon: IssueCouponAndIssuedCoupon) {
+    override fun save(issueCouponAndIssuedCoupon: IssueCouponAndIssuedCoupon): IssueCouponAndIssuedCoupon {
         val savedCoupon = save(issueCouponAndIssuedCoupon.remainingCoupon)
         val savedIssuedCoupon = save(issueCouponAndIssuedCoupon.issuedCoupon)
+        return IssueCouponAndIssuedCoupon(
+            issuedCoupon = savedIssuedCoupon,
+            remainingCoupon = savedCoupon
+        )
     }
 
     override fun findAllByUserId(userId: Long): List<Coupon> {
